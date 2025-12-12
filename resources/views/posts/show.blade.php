@@ -1,4 +1,8 @@
-<x-layouts.app :title="$post->title">
+<x-layouts.app 
+    :title="$post->seo_title ?? $post->title"
+    :description="$post->seo_description ?? $post->excerpt"
+    :image="asset('storage/' . $post->thumbnail)"
+>
 
     <header class="pt-10 pb-10 text-center container mx-auto px-4 max-w-4xl">
         
