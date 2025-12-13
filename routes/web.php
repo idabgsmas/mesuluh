@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PageController;
 
 Route::get('/', function () {
     // 1. Featured (Slider)
@@ -65,7 +66,7 @@ Route::get('/', function () {
 });
 
 // Route Halaman Tentang
-Route::view('/tentang-kami', 'pages.about')->name('about');
+Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
 
 // Route Halaman Kategori
 Route::get('/kategori/{category:slug}', function (Category $category) {
