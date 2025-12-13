@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     // 1. Featured (Slider)
@@ -51,39 +52,6 @@ Route::get('/', function () {
         }])
         ->get();
 
-    // // 5. Sorotan Kategori "Suluh"
-    // // Layout Horizontal: Ambil 4 tulisan
-    // $suluhPosts = Post::with(['user', 'category'])
-    //     ->whereHas('status', fn($q) => $q->where('name', 'Published'))
-    //     ->whereHas('category', fn($q) => $q->where('slug', 'suluh')) // Ganti slug sesuai keinginan
-    //     ->where('published_at', '<=', now())
-    //     ->whereNotIn('id', $excludeIds) // Pastikan belum muncul di atas
-    //     ->latest('published_at')
-    //     ->take(4)
-    //     ->get();
-
-    // // 6. Sorotan Kategori "Singgah"
-    // // Layout Horizontal: Ambil 4 tulisan
-    // $singgahPosts = Post::with(['user', 'category'])
-    //     ->whereHas('status', fn($q) => $q->where('name', 'Published'))
-    //     ->whereHas('category', fn($q) => $q->where('slug', 'singgah')) // Ganti slug sesuai keinginan
-    //     ->where('published_at', '<=', now())
-    //     ->whereNotIn('id', $excludeIds) // Pastikan belum muncul di atas
-    //     ->latest('published_at')
-    //     ->take(4)
-    //     ->get();
-
-    // // 7. Sorotan Kategori "Taut"
-    // // Layout Horizontal: Ambil 4 tulisan
-    // $tautPosts = Post::with(['user', 'category'])
-    //     ->whereHas('status', fn($q) => $q->where('name', 'Published'))
-    //     ->whereHas('category', fn($q) => $q->where('slug', 'taut')) // Ganti slug sesuai keinginan
-    //     ->where('published_at', '<=', now())
-    //     ->whereNotIn('id', $excludeIds) // Pastikan belum muncul di atas
-    //     ->latest('published_at')
-    //     ->take(4)
-    //     ->get();
-
     return view('welcome', [
         'featuredPosts' => $featuredPosts,
         'latestPosts' => $latestPosts,   // Perhatikan nama variabelnya saya ganti jadi latestPosts
@@ -117,50 +85,40 @@ Route::get('/kategori/{category:slug}', function (Category $category) {
 })->name('posts.category');
 
 // Route Pencarian
-Route::get('/search', function (Request $request) {
-    $query = $request->input('q'); // Ambil kata kunci dari URL ?q=...
+// Route::get('/search', function (Request $request) {
+//     $query = $request->input('q'); // Ambil kata kunci dari URL ?q=...
 
-    // Jika kosong, kembalikan ke home
-    if (!$query) {
-        return redirect('/');
-    }
+//     // Jika kosong, kembalikan ke home
+//     if (!$query) {
+//         return redirect('/');
+//     }
 
-    // Cari tulisan berdasarkan Judul ATAU Ringkasan
-    // Yang statusnya Published
-    $posts = Post::query()
-        ->with('user', 'category')
-        ->whereHas('status', fn($q) => $q->where('name', 'Published'))
-        ->where('published_at', '<=', now())
-        ->where(function($q) use ($query) {
-            $q->where('title', 'like', "%{$query}%")
-              ->orWhere('excerpt', 'like', "%{$query}%")
-              ->orWhere('content', 'like', "%{$query}%");
-        })
-        ->latest('published_at')
-        ->paginate(9);
+//     // Cari tulisan berdasarkan Judul ATAU Ringkasan
+//     // Yang statusnya Published
+//     $posts = Post::query()
+//         ->with('user', 'category')
+//         ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+//         ->where('published_at', '<=', now())
+//         ->where(function($q) use ($query) {
+//             $q->where('title', 'like', "%{$query}%")
+//               ->orWhere('excerpt', 'like', "%{$query}%")
+//               ->orWhere('content', 'like', "%{$query}%");
+//         })
+//         ->latest('published_at')
+//         ->paginate(9);
 
-    return view('posts.search', [
-        'posts' => $posts,
-        'query' => $query
-    ]);
-})->name('posts.search');
+//     return view('posts.search', [
+//         'posts' => $posts,
+//         'query' => $query
+//     ]);
+// })->name('posts.search');
+
+// Route Halaman Indeks & Pencarian
+Route::get('/indeks', [PostController::class, 'index'])->name('posts.search');
 
 // Route untuk halaman detail tulisan
 // {post:slug} artinya kita mencari tulisan berdasarkan 'slug' (URL), bukan ID.
-Route::get('/{post:slug}', function (Post $post) {
-    
-    // Logic: Jika tulisan belum publish, jangan kasih lihat (404)
-    if ($post->status->name !== 'Published' || $post->published_at > now()) {
-        abort(404);
-    }
-
-    // Hitung jumlah pembaca (View Counter) +1 setiap kali dibuka
-    $post->increment('views');
-
-    return view('posts.show', [
-        'post' => $post
-    ]);
-})->name('posts.show');
+Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 
 // Route untuk menyimpan subscriber
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe.store');

@@ -2,30 +2,32 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Post;
+use App\Models\Tag;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Post;
 use Filament\Tables;
+use Filament\Forms\Set;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Str;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Set;
-use Illuminate\Support\Str;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DateTimePicker;
+use App\Filament\Resources\PostResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PostResource\RelationManagers;
 
 class PostResource extends Resource
 {
@@ -91,6 +93,41 @@ class PostResource extends Resource
                                     ->required()
                                     ->searchable()
                                     ->preload(),
+                                
+                                TagsInput::make('tags')
+                                    ->label('Tags')
+                                    ->placeholder('Ketik tag baru dan tekan Enter')
+                                    ->separator(',')
+                                    ->splitKeys(['Tab', ' ']) // Bisa tekan Tab atau Spasi untuk bikin tag
+                                    
+                                    // 1. Tampilkan sugesti dari tag yang sudah ada
+                                    ->suggestions(
+                                        fn () => Tag::all()->pluck('name')->toArray()
+                                    )
+                                    
+                                    // 2. Load data saat edit artikel (Ambil dari database)
+                                    ->loadStateFromRelationshipsUsing(function ($component, $record) {
+                                        if ($record) {
+                                            $component->state($record->tags->pluck('name')->toArray());
+                                        }
+                                    })
+                                    
+                                    // 3. Simpan data saat form disubmit
+                                    ->saveRelationshipsUsing(function ($record, $state) {
+                                        // $state berisi array nama tag: ["Bali", "Adat"]
+                                        $tagIds = [];
+                                        foreach ($state as $tagName) {
+                                            // Buat atau Cari Tag berdasarkan nama
+                                            $slug = Str::slug($tagName);
+                                            $tag = Tag::firstOrCreate(
+                                                ['slug' => $slug],
+                                                ['name' => $tagName]
+                                            );
+                                            $tagIds[] = $tag->id;
+                                        }
+                                        // Hubungkan (Sync) ke Post
+                                        $record->tags()->sync($tagIds);
+                                    }),
 
                                 Select::make('user_id')
                                     ->label('Penulis')

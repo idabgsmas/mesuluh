@@ -51,4 +51,10 @@ class Post extends Model
     {
         return $this->belongsTo(Status::class);
     }
+
+    // 4. Relasi ke Tags
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 }
