@@ -21,7 +21,18 @@ class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // Ikon Menu di Sidebar
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    // Label Menu di Sidebar
+    protected static ?string $navigationLabel = 'Peran Pengguna';
+    protected static ?string $navigationGroup = 'Manajemen Pengguna'; // Mengelompokkan menu
+    protected static ?int $navigationSort = 2;
+
+    // Label Model
+    protected static ?string $recordTitleAttribute = 'Peran Pengguna';
+    protected static ?string $modelLabel = 'Peran Pengguna';
+    protected static ?string $pluralModelLabel = 'Peran Pengguna';
 
     public static function form(Form $form): Form
     {
@@ -49,14 +60,18 @@ class RoleResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nama Peran')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
+                    ->label('Slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -66,6 +81,7 @@ class RoleResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

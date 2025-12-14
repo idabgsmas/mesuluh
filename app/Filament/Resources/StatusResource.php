@@ -22,7 +22,18 @@ class StatusResource extends Resource
 {
     protected static ?string $model = Status::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // Ikon Menu di Sidebar
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    // Label Menu di Sidebar
+    protected static ?string $navigationLabel = 'Status Tulisan';
+    protected static ?string $navigationGroup = 'Manajemen Konten Tulisan'; // Mengelompokkan menu
+    protected static ?int $navigationSort = 4;
+
+    // Label Model
+    protected static ?string $recordTitleAttribute = 'Status Tulisan';
+    protected static ?string $modelLabel = 'Status Tulisan';
+    protected static ?string $pluralModelLabel = 'Status Tulisan';
 
     public static function form(Form $form): Form
     {
@@ -63,18 +74,24 @@ class StatusResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nama Status')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
+                    ->label('Slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('color')
+                    ->label('Warna')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')
+                    ->label('Status Aktif')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -84,6 +101,7 @@ class StatusResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

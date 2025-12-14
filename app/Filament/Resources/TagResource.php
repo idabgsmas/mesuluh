@@ -17,7 +17,18 @@ class TagResource extends Resource
 {
     protected static ?string $model = Tag::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // Ikon Menu di Sidebar
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
+
+    // Label Menu di Sidebar
+    protected static ?string $navigationLabel = 'Tag Tulisan';
+    protected static ?string $navigationGroup = 'Manajemen Konten Tulisan'; // Mengelompokkan menu
+    protected static ?int $navigationSort = 3;
+
+    // Label Model
+    protected static ?string $recordTitleAttribute = 'Tag Tulisan';
+    protected static ?string $modelLabel = 'Tag Tulisan';
+    protected static ?string $pluralModelLabel = 'Tag Tulisan';
 
     public static function form(Form $form): Form
     {
@@ -27,6 +38,7 @@ class TagResource extends Resource
                     ->schema([
                         // Input Nama Tag
                         Forms\Components\TextInput::make('name')
+                            ->label('Nama Tag')
                             ->required()
                             ->maxLength(255)
                             // Auto-generate Slug saat mengetik nama
@@ -49,11 +61,14 @@ class TagResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nama Tag')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
+                    ->label('Slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

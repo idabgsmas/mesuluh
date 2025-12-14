@@ -26,6 +26,12 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            // ->favicon(asset('images/favicon-32x32.png'))
+            ->brandName('MESULUH')
+            // ->brandLogo(asset('images/logo-rs-ngoerah.png'))
+            ->brandLogoHeight('2.5rem')
+
+            ->profile()
             ->login()
             ->colors([
                 'primary' => Color::hex('#8b004b'),

@@ -33,7 +33,18 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // Ikon Menu di Sidebar
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
+    
+    // Label Menu di Sidebar
+    protected static ?string $navigationLabel = 'Tulisan';
+    protected static ?string $navigationGroup = 'Manajemen Konten Tulisan'; // Mengelompokkan menu
+    protected static ?int $navigationSort = 1;
+
+    // Label Model
+    protected static ?string $recordTitleAttribute = 'Tulisan';
+    protected static ?string $modelLabel = 'Tulisan';
+    protected static ?string $pluralModelLabel = 'Tulisan';
 
     public static function form(Form $form): Form
     {
@@ -160,18 +171,26 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('thumbnail')
-                    ->label('Sampul')
-                    ->square(),
+                // ImageColumn::make('thumbnail')
+                //     ->label('Sampul')
+                //     ->square(),
 
                 TextColumn::make('title')
-                    ->label('Judul')
+                    ->label('Judul Tulisan')
                     ->searchable()
                     ->sortable()
-                    ->limit(30), // Batasi panjang judul biar tabel rapi
+                    ->limit(30) // Batasi panjang judul biar tabel rapi
+                    ->toolTip(fn (TextColumn $column): ?string => $column->getState()), // Tampilkan full judul saat hover
+
+                TextColumn::make('user.name')
+                    ->label('Penulis')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(), // Bisa disembunyikan
 
                 TextColumn::make('category.name')
-                    ->label('Kategori')
+                    ->label('Kategori Tulisan')
+                    ->searchable()
                     ->sortable()
                     ->badge() // Tampil seperti lencana
                     ->color(fn ($state) => match ($state) {
@@ -184,6 +203,8 @@ class PostResource extends Resource
 
                 TextColumn::make('status.name')
                     ->label('Status')
+                    ->searchable()
+                    ->sortable()
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Published' => 'success',
@@ -192,10 +213,6 @@ class PostResource extends Resource
                         'Rejected' => 'danger',
                         default => 'gray',
                     }),
-
-                TextColumn::make('user.name')
-                    ->label('Penulis')
-                    ->toggleable(), // Bisa disembunyikan
 
                 TextColumn::make('published_at')
                     ->label('Tayang')
