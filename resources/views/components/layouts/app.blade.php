@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +25,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Suranna&display=swap" rel="stylesheet">
     {{-- *Penjelasan:* Kode di atas menggunakan variabel `$description` dan `$image`. Jika halaman tersebut tidak mengirim data (misal halaman Beranda), dia akan pakai teks default. --}}
-
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -63,7 +64,6 @@
                 @endforeach
             </nav>
 
-            <div class="flex items-center gap-4">
                 <form action="{{ route('posts.search') }}" method="GET" 
                       class="hidden md:flex items-center rounded-full px-3 py-1 transition-all duration-300"
                       :class="scrolled ? 'bg-white/10 border border-white/20 text-white focus-within:bg-white focus-within:text-mesuluh-dark' : 'bg-white border border-mesuluh-primary/20 text-mesuluh-dark'">
@@ -173,9 +173,9 @@
                     <h3 class="font-serif text-lg font-bold mb-6 text-mesuluh-cream/90 tracking-wider uppercase text-xs">Tentang Mesuluh</h3>
                     <ul class="grid grid-cols-2 gap-3 font-sans text-sm opacity-80">
                         <li><a href="{{ route('about') }}" class="hover:text-white hover:opacity-100 transition">Profil Mesuluh</a></li>
-                        <li><a href="#" class="hover:text-white hover:opacity-100 transition">Tim Redaksi</a></li>
-                        <li><a href="#" class="hover:text-white hover:opacity-100 transition">Pedoman Media Siber</a></li>
-                        <li><a href="#" class="hover:text-white hover:opacity-100 transition">Kontak & Kerjasama</a></li>
+                        <li><a href="{{ route('about') }}#redaksi" class="hover:text-white hover:opacity-100 transition">Tim Redaksi</a></li>
+                        <li><a href="{{ route('pedoman') }}" class="hover:text-white hover:opacity-100 transition">Pedoman Media Siber</a></li>
+                        <li><a href="{{ route('contact') }}" class="hover:text-white hover:opacity-100 transition">Kontak & Kerjasama</a></li>
                     </ul>
 
                     <div class="mt-8 p-4 bg-white/5 rounded-lg border border-white/5">

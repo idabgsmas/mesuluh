@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -64,6 +65,64 @@ class PostController extends Controller
         return view('posts.index', [
             'posts' => $posts,
             'searchKeyword' => $request->q // Kirim kata kunci ke view untuk ditampilkan
+        ]);
+    }
+
+    /**
+     * Menampilkan Halaman Kategori
+     */
+    public function category(Category $category)
+    {
+        // DEFINISI FILTER DASAR:
+        // 1. Status harus 'Published'
+        // 2. Waktu published_at harus sudah lewat atau sekarang (bukan jadwal masa depan)
+        $baseQuery = $category->posts()
+            ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+            ->where('published_at', '<=', now());
+
+        // 1. AMBIL HERO POST (POSTINGAN UTAMA)
+        // Prioritas: Postingan yang dicentang 'is_featured'
+        // FIX: Menggunakan latest('published_at')
+        $featured = (clone $baseQuery)
+                             ->where('is_featured', true)
+                             ->latest('published_at') 
+                             ->first();
+
+        // Fallback: Jika tidak ada yang featured, ambil postingan terbaru biasa
+        if (!$featured) {
+            $featured = (clone $baseQuery)
+                        ->latest('published_at')
+                        ->first();
+        }
+
+        // 2. AMBIL LIST POSTINGAN (SISANYA)
+        // Ambil semua kecuali yang sudah dijadikan Featured
+        // FIX: Menggunakan latest('published_at')
+        $posts = (clone $baseQuery)
+                          ->when($featured, function ($query) use ($featured) {
+                              return $query->where('id', '!=', $featured->id);
+                          })
+                          ->latest('published_at') // <--- INI KUNCINYA
+                          ->paginate(10); 
+
+        // 3. AMBIL PILIHAN EDITOR (SIDEBAR)
+        // Ambil dari Global Post (bukan cuma kategori ini)
+        $editorsChoice = Post::with('category')
+                             ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+                             ->where('published_at', '<=', now())
+                             ->where('is_featured', true)
+                             ->when($featured, function ($query) use ($featured) {
+                                 return $query->where('id', '!=', $featured->id);
+                             })
+                             ->latest('published_at') // Pilihan editor juga urut tanggal terbit
+                             ->limit(5)
+                             ->get();
+
+        return view('posts.category', [
+            'category' => $category,
+            'featured' => $featured,
+            'posts' => $posts,
+            'editorsChoice' => $editorsChoice,
         ]);
     }
 

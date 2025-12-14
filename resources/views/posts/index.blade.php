@@ -46,14 +46,17 @@
                             <img src="{{ asset('storage/' . $post->thumbnail) }}" 
                                  class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
                             
-                            <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-mesuluh-dark rounded-md shadow-sm border border-gray-100">
+                            <span style="color: {{ $post->category->text_color ?? '#9D174D' }}; background-color: {{ $post->category->bg_color ?? '#FCE7F3' }};"
+                                  class="absolute top-4 left-4 px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md shadow-sm border border-white/50">
                                 {{ $post->category->name }}
                             </span>
                         </a>
 
                         <div class="flex flex-col flex-grow">
                             <div class="text-xs text-gray-400 mb-3 font-sans flex items-center gap-2">
-                                <span class="font-bold text-mesuluh-primary">{{ $post->user->name }}</span>
+                                <span style="color: {{ $post->category->text_color ?? '#9D174D' }}" class="font-bold">
+                                    {{ $post->user->name }}
+                                </span>
                                 <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
                                 <span>{{ $post->published_at->format('d M Y') }}</span>
                             </div>

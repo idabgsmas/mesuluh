@@ -68,51 +68,33 @@ Route::get('/', function () {
 // Route Halaman Tentang
 Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
 
+// Route Halaman Pedoman Media Siber
+Route::get('/pedoman-media-siber', [PageController::class, 'pedoman'])->name('pedoman');
+
+// Route Halaman Kontak
+Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
+
+// Route Kirim Pesan (POST) Kontak
+Route::post('/kontak', [PageController::class, 'storeContact'])->name('contact.store');
+
 // Route Halaman Kategori
-Route::get('/kategori/{category:slug}', function (Category $category) {
+// Panggil Controller yang sudah kita buat tadi
+Route::get('/kategori/{category:slug}', [PostController::class, 'category'])->name('posts.category');
+// Route::get('/kategori/{category:slug}', function (Category $category) {
     
-    // Ambil tulisan dalam kategori ini, yang statusnya Published, dan beri Halaman (Pagination)
-    $posts = $category->posts()
-        ->with('user')
-        ->whereHas('status', fn($q) => $q->where('name', 'Published'))
-        ->where('published_at', '<=', now())
-        ->latest('published_at')
-        ->paginate(9); // Tampilkan 9 tulisan per halaman
-
-    return view('posts.category', [
-        'category' => $category,
-        'posts' => $posts
-    ]);
-})->name('posts.category');
-
-// Route Pencarian
-// Route::get('/search', function (Request $request) {
-//     $query = $request->input('q'); // Ambil kata kunci dari URL ?q=...
-
-//     // Jika kosong, kembalikan ke home
-//     if (!$query) {
-//         return redirect('/');
-//     }
-
-//     // Cari tulisan berdasarkan Judul ATAU Ringkasan
-//     // Yang statusnya Published
-//     $posts = Post::query()
-//         ->with('user', 'category')
+//     // Ambil tulisan dalam kategori ini, yang statusnya Published, dan beri Halaman (Pagination)
+//     $posts = $category->posts()
+//         ->with('user')
 //         ->whereHas('status', fn($q) => $q->where('name', 'Published'))
 //         ->where('published_at', '<=', now())
-//         ->where(function($q) use ($query) {
-//             $q->where('title', 'like', "%{$query}%")
-//               ->orWhere('excerpt', 'like', "%{$query}%")
-//               ->orWhere('content', 'like', "%{$query}%");
-//         })
 //         ->latest('published_at')
-//         ->paginate(9);
+//         ->paginate(9); // Tampilkan 9 tulisan per halaman
 
-//     return view('posts.search', [
-//         'posts' => $posts,
-//         'query' => $query
+//     return view('posts.category', [
+//         'category' => $category,
+//         'posts' => $posts
 //     ]);
-// })->name('posts.search');
+// })->name('posts.category');
 
 // Route Halaman Indeks & Pencarian
 Route::get('/indeks', [PostController::class, 'index'])->name('posts.search');
