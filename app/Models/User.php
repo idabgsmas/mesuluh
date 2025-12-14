@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username', // Tambahan
         'email',
         'password',
         'role_id', // Tambahan
@@ -47,5 +48,22 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relasi: User memiliki BANYAK Post
+     */
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Ini kuncinya!
+     * Memberitahu Laravel untuk menggunakan kolom 'username' saat membuat link route.
+     */
+    public function getRouteKeyName()
+    {
+        return 'username';
     }
 }

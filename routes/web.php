@@ -75,6 +75,12 @@ Route::get('/', function () {
     ]);
 });
 
+// Route Daftar Semua Penulis
+Route::get('/penulis', [PostController::class, 'authors'])->name('authors.index');
+
+// Route Halaman Profil Penulis
+Route::get('/penulis/{user}', [PostController::class, 'author'])->name('posts.author');
+
 // Route Halaman Tentang
 Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
 

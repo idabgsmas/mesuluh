@@ -184,7 +184,7 @@
                     <h3 class="font-serif text-lg font-bold mb-6 text-mesuluh-cream/90 tracking-wider uppercase text-xs">Tentang Mesuluh</h3>
                     <ul class="grid grid-cols-2 gap-3 font-sans text-sm opacity-80">
                         <li><a href="{{ route('about') }}" class="hover:text-white hover:opacity-100 transition">Profil Mesuluh</a></li>
-                        <li><a href="{{ route('about') }}#redaksi" class="hover:text-white hover:opacity-100 transition">Tim Redaksi</a></li>
+                        <li><a href="{{ route('authors.index') }}" class="hover:text-white hover:opacity-100 transition">Tim Redaksi</a></li>
                         <li><a href="{{ route('pedoman') }}" class="hover:text-white hover:opacity-100 transition">Pedoman Media Siber</a></li>
                         <li><a href="{{ route('contact') }}" class="hover:text-white hover:opacity-100 transition">Kontak & Kerjasama</a></li>
                     </ul>

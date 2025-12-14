@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -123,6 +124,69 @@ class PostController extends Controller
             'featured' => $featured,
             'posts' => $posts,
             'editorsChoice' => $editorsChoice,
+        ]);
+    }
+
+    /**
+     * Menampilkan Daftar Semua Penulis
+     */
+    public function authors()
+    {
+        // Ambil user yang punya minimal 1 postingan Published
+        $authors = User::whereHas('posts', fn($q) => $q->whereHas('status', fn($sq) => $sq->where('name', 'Published')))
+            ->withCount(['posts' => fn($q) => $q->whereHas('status', fn($sq) => $sq->where('name', 'Published'))]) // Hitung jumlah tulisan
+            ->orderBy('name', 'asc') // Urutkan nama A-Z
+            ->get();
+
+        return view('posts.authors_index', [
+            'authors' => $authors
+        ]);
+    }
+
+    /**
+     * Menampilkan Halaman Profil Penulis dan Tulisan-tulisannya
+     */
+    public function author(User $user)
+    {
+        // Query Dasar: Ambil post milik user ini yang sudah Published
+        $baseQuery = $user->posts()
+            ->with('category')
+            ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+            ->where('published_at', '<=', now());
+
+        // 1. AMBIL HERO POST (Khusus Penulis Ini)
+        // Cek apakah penulis punya tulisan yang di-set 'is_featured'
+        $featured = (clone $baseQuery)
+                             ->where('is_featured', true)
+                             ->latest('published_at') 
+                             ->first();
+
+        // Jika tidak ada yang featured, ambil tulisan paling baru sebagai Hero
+        if (!$featured) {
+            $featured = (clone $baseQuery)
+                        ->latest('published_at')
+                        ->first();
+        }
+
+        // 2. AMBIL LIST TULISAN (Sisanya)
+        $posts = (clone $baseQuery)
+                          ->when($featured, function ($query) use ($featured) {
+                              return $query->where('id', '!=', $featured->id);
+                          })
+                          ->latest('published_at')
+                          ->paginate(10); 
+
+        // 3. AMBIL TULISAN TERPOPULER (Khusus Penulis Ini) - Untuk Sidebar
+        $popularPosts = (clone $baseQuery)
+                             ->orderBy('views', 'desc') // Urutkan berdasarkan views terbanyak
+                             ->limit(5)
+                             ->get();
+
+        return view('posts.author', [
+            'author' => $user,
+            'featured' => $featured,
+            'posts' => $posts,
+            'popularPosts' => $popularPosts,
         ]);
     }
 

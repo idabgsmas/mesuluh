@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
+use Filament\Forms\Set;
 
 class UserResource extends Resource
 {
@@ -27,7 +29,15 @@ class UserResource extends Resource
                     ->numeric(),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->live(onBlur: true) // Aktif saat diketik
+                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('username', Str::slug($state))), // Auto-generate slug
+                Forms\Components\TextInput::make('username')
+                    ->label('Slug')
+                    ->required()
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true) // Pastikan unik
+                    ->hint('Digunakan untuk link profil (contoh: ida-bagus-mas)'),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()

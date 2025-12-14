@@ -125,7 +125,9 @@
                         <p class="text-sm text-gray-600 leading-relaxed mb-4">
                             Menulis sepenuh hati untuk menyuarakan apa yang acap kali terbungkam di sudut-sudut pulau Dewata. Jurnalis & Kontributor Mesuluh.
                         </p>
-                        <a href="#" class="text-mesuluh-primary text-sm font-bold hover:underline">Lihat Profil Penulis &rarr;</a>
+                        <a href="{{ route('posts.author', $post->user) }}" class="text-mesuluh-primary text-sm font-bold hover:underline">
+                            Lihat Profil Penulis &rarr;
+                        </a>
                     </div>
                 </div>
 
