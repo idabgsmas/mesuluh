@@ -183,7 +183,7 @@
                             </svg>
                         </div>
                     </div>
-                    <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">Ni Luh Putu</h3>
+                    <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">Ida Ayu</h3>
                     <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">Pemimpin Redaksi</p>
                 </div>
 
@@ -195,7 +195,7 @@
                             </svg>
                         </div>
                     </div>
-                    <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">Ida Bagus</h3>
+                    <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">Ni Luh Putu</h3>
                     <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">Redaktur Pelaksana</p>
                 </div>
 
@@ -220,7 +220,7 @@
                         </div>
                     </div>
                     <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">Kadek Adi</h3>
-                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">Web Developer</p>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">Editor</p>
                 </div>
 
             </div>

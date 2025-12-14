@@ -2,12 +2,22 @@
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PageController;
 
+// Route untuk ganti bahasa
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'id'])) {
+        Session::put('locale', $locale);
+    }
+    return redirect()->back(); // Kembali ke halaman sebelumnya
+})->name('switch.language');
+
+// Route Halaman Beranda
 Route::get('/', function () {
     // 1. Featured (Slider)
     $featuredPosts = Post::with(['user', 'category'])

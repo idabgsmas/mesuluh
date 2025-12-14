@@ -1,20 +1,46 @@
 <x-layouts.app title="Beranda">
+    <style>
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+    </style>
+
     <section class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-4 bg-mesuluh-cream border-b border-mesuluh-primary/5 overflow-hidden">
         
-        <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-            <div class="absolute top-10 left-10 w-64 h-64 bg-mesuluh-primary/5 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-10 right-10 w-96 h-96 bg-mesuluh-primary/5 rounded-full blur-3xl"></div>
+        <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+            <div class="absolute top-0 -left-4 w-72 h-72 bg-mesuluh-primary/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
+            
+            <div class="absolute top-0 -right-4 w-72 h-72 bg-yellow-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+            
+            <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-mesuluh-primary/10 rounded-full blur-3xl animate-pulse"></div>
         </div>
 
         <div class="relative z-10 max-w-4xl mx-auto space-y-8">
             
-            <span class="inline-block py-1 px-3 border border-mesuluh-primary/30 rounded-full text-mesuluh-primary font-bold tracking-[0.2em] uppercase text-xs">
+            <span class="inline-block py-1 px-3 border border-mesuluh-primary/30 rounded-full text-mesuluh-primary font-bold tracking-[0.2em] uppercase text-xs backdrop-blur-sm bg-white/30">
                 Media Organik Perempuan Bali
             </span>
             
-            <h1 class="font-serif text-6xl md:text-8xl text-mesuluh-dark leading-none">
+            <h1 class="font-serif text-6xl md:text-8xl text-mesuluh-dark leading-none drop-shadow-sm">
                 Berkisah sebagai <br> 
-                <span class="text-mesuluh-primary italic">Suluh Kehidupan</span>
+                <span class="text-mesuluh-primary italic relative">
+                    Suluh Kehidupan
+                    <svg class="absolute w-full h-3 -bottom-1 left-0 text-mesuluh-primary/30" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00025 6.99999C18.5002 9.99999 74.5002 14.5 102 3.99999C133 -7.50001 176 11.5 198 2.49999" stroke="currentColor" stroke-width="3"/></svg>
+                </span>
             </h1>
             
             <p class="text-lg md:text-2xl text-gray-600 font-sans font-light leading-relaxed max-w-2xl mx-auto">
@@ -43,6 +69,8 @@
 
 
     <div id="featured" class="scroll-mt-24">
+        
+        
         @if($featuredPosts->count() > 0)
         <section class="relative bg-mesuluh-cream" 
                 x-data="{ 
@@ -53,6 +81,15 @@
                     autoPlay() { setInterval(() => this.next(), 6000) } 
                 }" 
                 x-init="autoPlay()">
+            <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+                {{-- <div class="absolute top-0 -left-4 w-72 h-72 bg-mesuluh-primary/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div> --}}
+                
+                {{-- <div class="absolute top-0 -right-4 w-72 h-72 bg-yellow-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div> --}}
+                
+                <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-200/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-mesuluh-primary/10 rounded-full blur-3xl animate-pulse"></div>
+            </div>
 
             <div class="container mx-auto px-4 py-12 relative min-h-[600px] md:min-h-[500px] flex items-center">
                 

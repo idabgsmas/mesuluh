@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
@@ -63,6 +62,18 @@
                     </a>
                 @endforeach
             </nav>
+
+            {{-- <div class="flex items-center gap-2 text-xs font-bold ml-4">
+                <a href="{{ route('switch.language', 'id') }}" 
+                class="{{ app()->getLocale() == 'id' ? 'text-mesuluh-primary underline' : 'text-gray-400 hover:text-mesuluh-primary' }}">
+                ID
+                </a>
+                <span class="text-gray-300">|</span>
+                <a href="{{ route('switch.language', 'en') }}" 
+                class="{{ app()->getLocale() == 'en' ? 'text-mesuluh-primary underline' : 'text-gray-400 hover:text-mesuluh-primary' }}">
+                EN
+                </a>
+            </div> --}}
 
                 <form action="{{ route('posts.search') }}" method="GET" 
                       class="hidden md:flex items-center rounded-full px-3 py-1 transition-all duration-300"
