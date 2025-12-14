@@ -1,4 +1,7 @@
-<x-layouts.app>
+<x-layouts.app 
+    :title="$searchKeyword ? 'Pencarian: ' . $searchKeyword : 'Indeks Tulisan'"
+    description="Arsip lengkap tulisan Mesuluh dari berbagai rubrik."
+>
 
     <div class="pt-32 pb-16 bg-mesuluh-cream border-b border-mesuluh-primary/10">
         <div class="container mx-auto px-4 text-center">

@@ -1,4 +1,7 @@
-<x-layouts.app>
+<x-layouts.app 
+    title="Tentang Kami" 
+    description="Mengenal Mesuluh, media organik yang merawat ingatan dan kehidupan."
+>
 
     <section class="relative py-40 md:py-40 bg-mesuluh-cream overflow-hidden">
         

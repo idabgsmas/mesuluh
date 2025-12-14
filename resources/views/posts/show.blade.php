@@ -1,4 +1,8 @@
-<x-layouts.app>
+<x-layouts.app 
+    :title="$post->title"
+    :description="$post->excerpt"
+    :image="asset('storage/' . $post->thumbnail)"
+>
     
     <div class="pt-32 pb-10 bg-mesuluh-cream text-center px-4 relative">
         <div class="flex justify-center gap-2 text-xs font-bold tracking-widest uppercase text-gray-400 mb-6">

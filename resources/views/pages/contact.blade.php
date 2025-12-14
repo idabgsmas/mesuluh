@@ -1,4 +1,7 @@
-<x-layouts.app>
+<x-layouts.app 
+    title="Hubungi Redaksi" 
+    description="Sapa redaksi Mesuluh untuk kolaborasi, kritik, dan saran."
+>
 
     <div class="pt-32 pb-32 bg-mesuluh-cream dark:bg-gray-900 text-center px-4 transition-colors duration-300">
         <span class="text-mesuluh-primary font-bold tracking-widest uppercase text-xs mb-4 inline-block bg-mesuluh-primary/5 px-3 py-1 rounded-full border border-mesuluh-primary/10">
