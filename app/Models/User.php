@@ -76,4 +76,22 @@ class User extends Authenticatable
     {
         return 'username';
     }
+
+    // Cek apakah Admin
+    public function isAdmin(): bool
+    {
+        return $this->role_id === 1;
+    }
+
+    // Cek apakah Editor
+    public function isEditor(): bool
+    {
+        return $this->role_id === 2;
+    }
+
+    // Cek apakah Penulis
+    public function isPenulis(): bool
+    {
+        return $this->role_id === 3;
+    }
 }

@@ -30,6 +30,12 @@ class TagResource extends Resource
     protected static ?string $modelLabel = 'Tag Tulisan';
     protected static ?string $pluralModelLabel = 'Tag Tulisan';
 
+    public static function canViewAny(): bool
+    {
+        // Boleh dilihat oleh siapa saja KECUALI Penulis
+        return ! auth()->user()->isPenulis();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

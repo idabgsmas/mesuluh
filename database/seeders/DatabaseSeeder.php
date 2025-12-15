@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Status;
 use App\Models\User;
+use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -13,26 +15,40 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Buat User Admin (Jika belum ada)
+        // 1. BUAT ROLES
+        $adminRole = Role::firstOrCreate(['id' => 1], ['name' => 'Admin'], ['slug' => 'admin']);
+        $editorRole = Role::firstOrCreate(['id' => 2], ['name' => 'Editor'], ['slug' => 'editor']);
+        $penulisRole = Role::firstOrCreate(['id' => 3], ['name' => 'Penulis'], ['slug' => 'penulis']);
+
+        // 2. BUAT STATUSES (URUTAN PENTING!)
+        Status::firstOrCreate(['id' => 1], ['name' => 'Draft', 'color' => 'gray']);
+        Status::firstOrCreate(['id' => 2], ['name' => 'Review', 'color' => 'warning']);
+        Status::firstOrCreate(['id' => 3], ['name' => 'Published', 'color' => 'success']);
+        Status::firstOrCreate(['id' => 4], ['name' => 'Revisi', 'color' => 'danger']);
+        Status::firstOrCreate(['id' => 5], ['name' => 'Ditolak', 'color' => 'danger']);
+
+        // 3. BUAT USER ADMIN UTAMA
         $user = User::firstOrCreate(
             ['email' => 'admin@mesuluh.com'],
             [
                 'name' => 'Admin Mesuluh',
-                'password' => bcrypt('password'), // Password standar
+                'username' => 'admin-mesuluh',
+                'password' => Hash::make('password'),
+                'role_id' => $adminRole->id,
                 'email_verified_at' => now(),
             ]
         );
 
-        // 2. Buat Status (Penting untuk filter Published)
+        // 4. Buat Status (Penting untuk filter Published)
         $statusPublished = Status::firstOrCreate(['name' => 'Published'], ['slug' => 'published', 'color' => 'success']);
         $statusDraft = Status::firstOrCreate(['name' => 'Draft'], ['slug' => 'draft', 'color' => 'warning']);
 
-        // 3. Buat Kategori (Sesuai Menu)
+        // 5. Buat Kategori (Sesuai Menu)
         $categories = [
-            ['name' => 'Sulur', 'description' => 'Menelusuri akar kisah yang mendalam.'],
-            ['name' => 'Suluh', 'description' => 'Menjadi penerang dan inspirasi.'],
-            ['name' => 'Singgah', 'description' => 'Tempat istirahat sejenak menikmati cerita ringan.'],
-            ['name' => 'Taut', 'description' => 'Menautkan rasa dan solidaritas bersama.'],
+            ['slug' => 'sulur', 'name' => 'Sulur', 'text_color' => '#9D174D', 'bg_color' => '#FCE7F3', 'description' => 'Menelusuri akar kisah yang mendalam.'],
+            ['slug' => 'suluh', 'name' => 'Suluh', 'text_color' => '#065F46', 'bg_color' => '#D1FAE5', 'description' => 'Menjadi penerang dan inspirasi.'],
+            ['slug' => 'singgah', 'name' => 'Singgah', 'text_color' => '#1E40AF', 'bg_color' => '#DBEAFE', 'description' => 'Tempat istirahat sejenak menikmati cerita ringan.'],
+            ['slug' => 'taut', 'name' => 'Taut', 'text_color' => '#92400E', 'bg_color' => '#FEF3C7', 'description' => 'Menautkan rasa dan solidaritas bersama.'],
         ];
 
         foreach ($categories as $cat) {
@@ -41,12 +57,12 @@ class DatabaseSeeder extends Seeder
                 [
                     'name' => $cat['name'],
                     'description' => $cat['description'],
-                    'text_color' => '#8b004b', // Magenta Mesuluh
-                    'bg_color' => '#fff8e8',   // Krem Mesuluh
+                    'text_color' => $cat['text_color'], 
+                    'bg_color' => $cat['bg_color'],
                 ]
             );
 
-            // 4. ISI POSTINGAN UNTUK SETIAP KATEGORI
+            // 6. ISI POSTINGAN UNTUK SETIAP KATEGORI
             // Kita buat 8 postingan per kategori (Total 32 Post)
             for ($i = 1; $i <= 8; $i++) {
                 

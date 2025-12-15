@@ -47,7 +47,7 @@
                         </p>
 
                         <p class="text-gray-500 text-sm line-clamp-2 font-sans leading-relaxed">
-                            {{ $author->bio ?? 'Penulis aktif di Mesuluh.' }}
+                            {{ $author->bio ?? $author->role->name . ' di Mesuluh.' }}
                         </p>
 
                         <div class="mt-6 pt-6 border-t border-gray-50 opacity-0 group-hover:opacity-100 transition duration-300 transform translate-y-2 group-hover:translate-y-0">

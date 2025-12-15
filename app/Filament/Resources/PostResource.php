@@ -50,6 +50,18 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
+                // --- BAGIAN ATAS: ALERT CATATAN REVISI/PENOLAKAN ---
+                Forms\Components\Section::make('Catatan dari Editor')
+                    ->schema([
+                        Forms\Components\Placeholder::make('notes_display')
+                            ->label('')
+                            ->content(fn ($record) => $record?->revision_notes)
+                            ->extraAttributes(['class' => 'text-danger-600 font-bold bg-red-50 p-4 rounded-lg border border-red-200']),
+                    ])
+                    // Hanya muncul jika ada catatan DAN statusnya Revisi (4) atau Ditolak (5)
+                    ->visible(fn ($record) => $record && $record->revision_notes && in_array($record->status_id, [4, 5]))
+                    ->columnSpanFull(),
+                // ----------------------------------------------------
                 // --- KOLOM KIRI (70% Layar) ---
                 Group::make()
                     ->schema([
@@ -59,31 +71,38 @@ class PostResource extends Resource
                                     ->label('Judul Tulisan')
                                     ->required()
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
+                                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state)))
+                                    // KUNCI JIKA DITOLAK (ID 5)
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
 
                                 TextInput::make('slug')
                                     ->required()
                                     ->readOnly()
-                                    ->unique(ignoreRecord: true), // Unik, kecuali punya diri sendiri saat edit
+                                    ->unique(ignoreRecord: true) // Unik, kecuali punya diri sendiri saat edit
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
 
                                 Textarea::make('excerpt')
                                     ->label('Ringkasan Singkat')
                                     ->rows(3)
                                     ->maxLength(255)
-                                    ->helperText('Ditampilkan di kartu halaman depan.'),
+                                    ->helperText('Ditampilkan di kartu halaman depan.')
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
 
                                 RichEditor::make('content')
                                     ->label('Isi Tulisan')
                                     ->required()
                                     ->fileAttachmentsDirectory('posts/content-images') // Simpan gambar konten di folder rapi
-                                    ->columnSpanFull(),
+                                    ->columnSpanFull()
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
                             ]),
                         
                         Section::make('SEO & Meta')
                             ->schema([
                                 TextInput::make('seo_title')->label('Judul SEO (Opsional)'),
                                 Textarea::make('seo_description')->label('Deskripsi SEO (Opsional)'),
-                            ])->collapsed(), // Bisa dilipat biar gak menuhin layar
+                            ])
+                            ->collapsed() // Bisa dilipat biar gak menuhin layar
+                            ->disabled(fn ($record) => $record?->status_id === 5),
                     ])
                     ->columnSpan(['lg' => 2]), // Lebar 2/3 layar
 
@@ -96,14 +115,16 @@ class PostResource extends Resource
                                     ->label('Gambar Sampul')
                                     ->image()
                                     ->directory('posts/thumbnails') // Folder penyimpanan
-                                    ->required(),
+                                    ->required()
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
 
                                 Select::make('category_id')
                                     ->label('Kategori')
                                     ->relationship('category', 'name') // Ambil dari tabel categories
                                     ->required()
                                     ->searchable()
-                                    ->preload(),
+                                    ->preload()
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
                                 
                                 TagsInput::make('tags')
                                     ->label('Tags')
@@ -138,28 +159,33 @@ class PostResource extends Resource
                                         }
                                         // Hubungkan (Sync) ke Post
                                         $record->tags()->sync($tagIds);
-                                    }),
+                                    })
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
 
-                                Select::make('user_id')
-                                    ->label('Penulis')
-                                    ->relationship('user', 'name')
-                                    ->default(fn () => auth()->id()) // Otomatis pilih diri sendiri
-                                    ->required()
-                                    ->searchable(),
+                                // Select::make('user_id')
+                                //     ->label('Penulis')
+                                //     ->relationship('user', 'name')
+                                //     ->default(fn () => auth()->id()) // Otomatis pilih diri sendiri
+                                //     ->required()
+                                //     ->searchable(),
 
                                 DateTimePicker::make('published_at')
-                                    ->label('Tanggal Tayang'),
+                                    ->label('Tanggal Tayang')
+                                    ->visible(fn () => !auth()->user()->isPenulis()) // Hanya tampilkan untuk Admin/Editor,
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
 
-                                Select::make('status_id')
-                                    ->label('Status')
-                                    ->relationship('status', 'name')
-                                    ->required()
-                                    ->native(false), // Tampilan dropdown lebih modern
+                                // Select::make('status_id')
+                                //     ->label('Status')
+                                //     ->relationship('status', 'name')
+                                //     ->required()
+                                //     ->native(false), // Tampilan dropdown lebih modern
 
                                 Toggle::make('is_featured')
                                     ->label('Jadikan Headline?')
                                     ->onColor('success')
-                                    ->offColor('gray'),
+                                    ->offColor('gray')
+                                    ->visible(fn () => !auth()->user()->isPenulis()) // Hanya tampilkan untuk Admin/Editor
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
                             ]),
                     ])
                     ->columnSpan(['lg' => 1]), // Lebar 1/3 layar
@@ -210,7 +236,8 @@ class PostResource extends Resource
                         'Published' => 'success',
                         'Review' => 'warning',
                         'Draft' => 'gray',
-                        'Rejected' => 'danger',
+                        'Ditolak' => 'danger',
+                        'Revisi' => 'warning',
                         default => 'gray',
                     }),
 
@@ -248,5 +275,26 @@ class PostResource extends Resource
             'create' => Pages\CreatePost::route('/create'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
+    }
+
+    // Batasi tampilan data di Filament berdasarkan peran pengguna
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = auth()->user();
+
+        if ($user->isPenulis()) {
+            // Penulis hanya melihat tulisannya sendiri
+            $query->where('user_id', $user->id);
+        } else {
+            // Admin & Editor melihat SEMUA tulisan, KECUALI Draft milik orang lain
+            $query->where(function ($q) use ($user) {
+                $q->where('status_id', '!=', 1) // Bukan Draft (ID 1)
+                  ->orWhere('user_id', $user->id); // Kecuali Draft itu milik Admin/Editor sendiri
+            });
+        }
+
+        return $query;
     }
 }

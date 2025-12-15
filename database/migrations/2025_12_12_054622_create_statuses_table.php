@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Draft, Review, Published
-            $table->string('slug')->unique();
+            $table->string('slug')->unique()->nullable();
             $table->string('color')->default('gray'); // primary, success, danger, warning
             $table->boolean('is_active')->default(true);
             $table->timestamps();

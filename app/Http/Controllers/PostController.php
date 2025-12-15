@@ -14,6 +14,11 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        // Tambahkan validasi keamanan ini di paling atas
+        if ($post->status_id != 3 || ($post->published_at > now() && !auth()->check())) {
+            abort(404); // Tampilkan error 404 jika belum waktunya tayang
+        }
+
         // 1. Tambah views
         $post->increment('views');
 
@@ -22,6 +27,7 @@ class PostController extends Controller
             ->where('category_id', $post->category_id)
             ->where('id', '!=', $post->id)
             ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+            ->where('published_at', '<=', now())
             ->latest('published_at')
             ->take(4) // Ambil 4 biar genap grid-nya
             ->get();
@@ -30,6 +36,7 @@ class PostController extends Controller
         $latestPosts = Post::with(['user', 'category'])
             ->where('id', '!=', $post->id) // Jangan tampilkan post yg sedang dibaca
             ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+            ->where('published_at', '<=', now())
             ->latest('published_at')
             ->take(5)
             ->get();
@@ -48,7 +55,8 @@ class PostController extends Controller
     {
         // Mulai Query: Ambil Post yang Published
         $query = Post::with(['user', 'category'])
-            ->whereHas('status', fn($q) => $q->where('name', 'Published'));
+            ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+            ->where('published_at', '<=', now());
 
         // Cek: Apakah ada kata kunci pencarian ('q')?
         if ($request->has('q') && $request->q != '') {
@@ -133,7 +141,9 @@ class PostController extends Controller
     public function authors()
     {
         // Ambil user yang punya minimal 1 postingan Published
-        $authors = User::whereHas('posts', fn($q) => $q->whereHas('status', fn($sq) => $sq->where('name', 'Published')))
+        // DAN Role-nya adalah Editor (2) atau Penulis (3)
+        $authors = User::whereIn('role_id', [2, 3])
+            ->whereHas('posts', fn($q) => $q->whereHas('status', fn($sq) => $sq->where('name', 'Published')))
             ->withCount(['posts' => fn($q) => $q->whereHas('status', fn($sq) => $sq->where('name', 'Published'))]) // Hitung jumlah tulisan
             ->orderBy('name', 'asc') // Urutkan nama A-Z
             ->get();

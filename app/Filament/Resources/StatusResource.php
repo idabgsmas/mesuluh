@@ -35,6 +35,11 @@ class StatusResource extends Resource
     protected static ?string $modelLabel = 'Status Tulisan';
     protected static ?string $pluralModelLabel = 'Status Tulisan';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

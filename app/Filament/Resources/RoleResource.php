@@ -34,6 +34,11 @@ class RoleResource extends Resource
     protected static ?string $modelLabel = 'Peran Pengguna';
     protected static ?string $pluralModelLabel = 'Peran Pengguna';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

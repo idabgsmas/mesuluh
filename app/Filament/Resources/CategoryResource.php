@@ -35,6 +35,12 @@ class CategoryResource extends Resource
     protected static ?string $modelLabel = 'Kategori Tulisan';
     protected static ?string $pluralModelLabel = 'Kategori Tulisan';
 
+    public static function canViewAny(): bool
+    {
+        // Boleh dilihat oleh siapa saja KECUALI Penulis
+        return ! auth()->user()->isPenulis();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

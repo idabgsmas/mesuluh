@@ -41,7 +41,7 @@
                 
                 <div class="flex flex-col animate-fade-in-up">
                     <span class="text-3xl font-serif font-bold text-mesuluh-dark">
-                        {{ $author->posts()->where('status_id', 1)->count() }}
+                        {{ $author->posts()->where('status_id', 3)->count() }}
                     </span>
                     <span class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">
                         Tulisan
