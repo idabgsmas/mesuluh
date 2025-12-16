@@ -9,6 +9,13 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverview extends BaseWidget
 {
+
+    public static function canView(): bool
+    {
+        // Boleh dilihat siapa saja, KECUALI Penulis
+        return ! auth()->user()->isPenulis();
+    }
+    
     protected function getStats(): array
     {
         return [

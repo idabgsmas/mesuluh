@@ -16,6 +16,11 @@ class BlogPostsChart extends ChartWidget
     
     protected static ?int $sort = 2; // Urutan ke-2 (di bawah kartu)
 
+    public static function canView(): bool
+    {
+        return ! auth()->user()->isPenulis();
+    }
+
     protected function getData(): array
     {
         // Ambil data tulisan per bulan dalam 1 tahun terakhir

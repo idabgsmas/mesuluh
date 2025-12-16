@@ -14,6 +14,11 @@ class CategoryStatsChart extends ChartWidget
 
     protected static ?string $maxHeight = '476px'; // Paksa tinggi maksimal
 
+    public static function canView(): bool
+    {
+        return ! auth()->user()->isPenulis();
+    }
+
     protected function getData(): array
     {
         $categories = Category::withCount('posts')->get();

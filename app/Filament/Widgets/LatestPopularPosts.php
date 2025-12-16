@@ -15,6 +15,14 @@ class LatestPopularPosts extends BaseWidget
     
     protected static ?int $sort = 4; // Urutan ke-4
 
+    protected int | string | array $columnSpan = 'full';  // <--- HAPUS BARIS INI
+
+    public static function canView(): bool
+    {
+        // Semua boleh lihat (Return true), atau hapus method ini (defaultnya true)
+        return true; 
+    }
+
     public function table(Table $table): Table
     {
         return $table
