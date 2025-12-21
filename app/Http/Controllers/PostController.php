@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Category;
+use App\Models\PostView;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -14,13 +15,32 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        // 1. REKAM RIWAYAT KUNJUNGAN (Untuk Grafik)
+        // Kita bisa cek session agar 1 orang tidak dihitung berkali-kali dalam semenit (opsional)
+        $sessionKey = 'viewed_post_' . $post->id;
+        
+        if (!session()->has($sessionKey)) {
+            PostView::create([
+                'post_id' => $post->id,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+            
+            // 2. INCREMENT TOTAL (Untuk Angka Cepat di Tabel)
+            // Kita tetap pakai ini biar query list artikel tidak berat
+            $post->increment('views');
+
+            // Simpan sesi selama 60 menit agar refresh tidak nambah view terus
+            session()->put($sessionKey, true); 
+        }
+
         // Tambahkan validasi keamanan ini di paling atas
         if ($post->status_id != 3 || ($post->published_at > now() && !auth()->check())) {
             abort(404); // Tampilkan error 404 jika belum waktunya tayang
         }
 
-        // 1. Tambah views
-        $post->increment('views');
+        // // 1. Tambah views
+        // $post->increment('views');
 
         // 2. Ambil Related Posts (Untuk ditaruh di BAWAH artikel)
         $relatedPosts = Post::with(['user', 'category'])

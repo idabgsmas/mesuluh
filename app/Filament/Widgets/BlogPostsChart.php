@@ -9,27 +9,59 @@ use Flowframe\Trend\TrendValue;
 
 class BlogPostsChart extends ChartWidget
 {
-    protected static ?string $heading = 'Produktifitas Redaksi (Tulisan per Bulan)';
+    protected static ?string $heading = 'Produktifitas Redaksi';
     
-    // Agar grafik memanjang penuh
-    protected int | string | array $columnSpan = 'full';
-    
-    protected static ?int $sort = 2; // Urutan ke-2 (di bawah kartu)
+    protected static ?int $sort = 2;
 
-    public static function canView(): bool
+    // Default filter yang aktif saat pertama buka
+    public ?string $filter = 'year';
+
+    // Mendefinisikan opsi filter yang muncul di pojok kanan atas grafik
+    protected function getFilters(): ?array
     {
-        return ! auth()->user()->isPenulis();
+        return [
+            'week' => 'Minggu Ini',
+            'month' => 'Bulan Ini',
+            'year' => 'Tahun Ini',
+        ];
     }
 
     protected function getData(): array
     {
-        // Ambil data tulisan per bulan dalam 1 tahun terakhir
+        // Mendeteksi filter yang dipilih user
+        $activeFilter = $this->filter;
+
+        // Tentukan rentang waktu berdasarkan filter
+        $match = match ($activeFilter) {
+            'week' => [
+                'start' => now()->startOfWeek(),
+                'end' => now()->endOfWeek(),
+                'per' => 'perDay', // Kalau mingguan, kita lihat per hari
+            ],
+            'month' => [
+                'start' => now()->startOfMonth(),
+                'end' => now()->endOfMonth(),
+                'per' => 'perDay', // Kalau bulanan, kita lihat per hari
+            ],
+            'year' => [
+                'start' => now()->startOfYear(),
+                'end' => now()->endOfYear(),
+                'per' => 'perMonth', // Kalau tahunan, kita lihat per bulan
+            ],
+            default => [ // Fallback
+                'start' => now()->startOfYear(),
+                'end' => now()->endOfYear(),
+                'per' => 'perMonth',
+            ]
+        };
+
+        // Query Data
         $data = Trend::model(Post::class)
             ->between(
-                start: now()->startOfYear(),
-                end: now()->endOfYear(),
+                start: $match['start'],
+                end: $match['end'],
             )
-            ->perMonth()
+            ->{$match['per']}() // Dinamis: perDay() atau perMonth()
             ->count();
 
         return [
@@ -38,16 +70,25 @@ class BlogPostsChart extends ChartWidget
                     'label' => 'Tulisan Diterbitkan',
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                     'borderColor' => '#8b004b', // Warna Mesuluh Primary
-                    'backgroundColor' => '#8b004b20', // Transparan
+                    'backgroundColor' => '#8b004b20',
                     'fill' => true,
                 ],
             ],
-            'labels' => $data->map(fn (TrendValue $value) => $value->date),
+            'labels' => $data->map(fn (TrendValue $value) => $activeFilter === 'year' 
+                ? $value->date // Format bulan (misal: 2024-01)
+                : \Carbon\Carbon::parse($value->date)->format('d M') // Format tanggal (misal: 17 Dec)
+            ),
         ];
     }
 
     protected function getType(): string
     {
-        return 'line'; // Jenis grafik: Line (Garis)
+        return 'line';
+    }
+    
+    // Admin Only
+    public static function canView(): bool
+    {
+        return ! auth()->user()->isPenulis();
     }
 }

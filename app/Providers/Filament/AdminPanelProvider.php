@@ -30,7 +30,6 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('MESULUH')
             // ->brandLogo(asset('images/logo-rs-ngoerah.png'))
             ->brandLogoHeight('2.5rem')
-
             ->profile()
             ->login()
             ->colors([
