@@ -8,8 +8,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Post;
 use App\Models\Role;
+use Filament\Models\Contracts\HasName;
+use Filament\Models\Contracts\HasAvatar;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasName, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -93,5 +95,25 @@ class User extends Authenticatable
     public function isPenulis(): bool
     {
         return $this->role_id === 3;
+    }
+
+    public function getFilamentName(): string
+    {
+        // Cek apakah user punya role, jika ya tampilkan "Nama (Role)"
+        // Jika tidak (data error), tampilkan Nama saja
+        $roleName = $this->role ? $this->role->name : 'User';
+        
+        return "{$this->name}";
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        // Jika kolom avatar di database ada isinya, pakai itu
+        if ($this->avatar) {
+            return asset('storage/' . $this->avatar);
+        }
+        
+        // Jika kosong, kembalikan null (Filament akan pakai inisial nama)
+        return null;
     }
 }

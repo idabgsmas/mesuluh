@@ -17,6 +17,8 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\MenuItem; 
+use Illuminate\Support\Facades\Auth; 
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -30,6 +32,15 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('MESULUH')
             // ->brandLogo(asset('images/logo-rs-ngoerah.png'))
             ->brandLogoHeight('2.5rem')
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    ->label(fn () => auth()->user() 
+                        ? auth()->user()->name . ' (' . (auth()->user()->role->name ?? 'User') . ')' 
+                        : 'Profile'
+                    )
+                    ->icon('heroicon-m-user-circle'),
+            ])
+            ->sidebarCollapsibleOnDesktop()
             ->profile()
             ->login()
             ->colors([

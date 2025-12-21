@@ -245,10 +245,29 @@ class PostResource extends Resource
                     ->label('Tayang')
                     ->dateTime('d M Y')
                     ->sortable(),
+
+                TextColumn::make('views')
+                    ->label('Dibaca')
+                    ->sortable()
+                    ->toggleable(),
             ])
             ->defaultSort('created_at', 'desc') // Urutkan dari yang terbaru
             ->filters([
-                // Nanti kita tambah filter di sini
+                Tables\Filters\SelectFilter::make('user.name')
+                    ->label('Penulis')
+                    ->relationship('user', 'name'),
+                Tables\Filters\SelectFilter::make('category')
+                    ->label('Kategori')
+                    ->relationship('category', 'name'),
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('Status')
+                    ->relationship('status', 'name'),
+                Tables\Filters\SelectFilter::make('is_featured')
+                    ->label('Tulisan Unggulan')
+                    ->options([
+                        1 => 'Tulisan Unggulan',
+                        0 => 'Tidak Unggulan',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
