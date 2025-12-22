@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>{{ $title ?? 'Mesuluh' }} - Merawat Kehidupan</title>
-
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    
     <meta name="description" content="{{ $description ?? 'Media organik yang membahas kisah perempuan Bali dengan jujur.' }}">
     
     <meta property="og:type" content="website">
@@ -38,11 +39,27 @@
         
         <div class="container mx-auto px-4 flex items-center justify-between transition-all duration-300">
             
-            <a href="/" 
+            {{-- <a href="/" 
                class="font-serif text-3xl font-bold tracking-wide transition-colors duration-300"
                :class="scrolled ? 'text-mesuluh-cream' : 'text-mesuluh-primary'">
                 MESULUH
+            </a> --}}
+
+        <div class="container mx-auto px-4 flex items-center justify-between transition-all duration-300">
+            {{-- Link Logo & Nama Brand --}}
+            <a href="{{ url('/') }}" class="flex items-center gap-3 no-underline">
+                {{-- Tag Logo --}}
+                <img src="{{ asset('images/logo-mesuluh.png') }}" 
+                    alt="Logo Mesuluh" 
+                    class="h-12 w-auto object-contain">
+                
+                {{-- Teks Brand (Tetap Ada) --}}
+                <span class="font-serif text-3xl font-bold tracking-wide transition-colors duration-300"
+               :class="scrolled ? 'text-mesuluh-cream' : 'text-mesuluh-primary'">
+                    MESULUH
+                </span>
             </a>
+            
 
             <nav class="hidden md:flex gap-8 font-medium font-sans text-sm tracking-wide transition-colors duration-300">
                 @foreach([
@@ -145,31 +162,43 @@
     </main>
 
     <footer class="bg-mesuluh-primary text-mesuluh-cream mt-20 border-t border-white/10">
-        
         <div class="container mx-auto px-4 py-16">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
                 
-                <div class="md:col-span-5 space-y-6">
-                    <a href="/" class="inline-block">
-                        <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wide">MESULUH</h2>
-                    </a>
-                    <p class="font-sans text-sm md:text-base opacity-80 leading-relaxed max-w-sm">
-                        Merawat hingga meruwat kehidupan. Media organik yang membahas kisah-kisah perempuan Bali dari sudut ke sudut dengan jujur dan mendalam.
-                    </p>
-                    
-                    <div class="flex gap-4 pt-4">
-                        <a href="#" class="w-10 h-10 rounded-full border border-mesuluh-cream/30 flex items-center justify-center hover:bg-mesuluh-cream hover:text-mesuluh-primary transition duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full border border-mesuluh-cream/30 flex items-center justify-center hover:bg-mesuluh-cream hover:text-mesuluh-primary transition duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full border border-mesuluh-cream/30 flex items-center justify-center hover:bg-mesuluh-cream hover:text-mesuluh-primary transition duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
-                        </a>
+                {{-- Kolom Pertama: Logo + Deskripsi --}}
+                <div class="md:col-span-5 flex items-stretch gap-8"> {{-- Ganti items-start menjadi items-stretch, gap diperbesar sedikit --}}
+    
+                    {{-- Logo Mesuluh --}}
+                    <img src="{{ asset('images/logo-mesuluh.png') }}" 
+                        alt="Logo Mesuluh" 
+                        class="h-full w-32 md:w-40 object-contain shrink-0"> {{-- h-full supaya mengikuti tinggi teks, object-contain supaya tidak gepeng --}}
+
+                    {{-- Kontainer Teks & Sosmed --}}
+                    <div class="flex flex-col justify-between py-1"> {{-- justify-between supaya teks tersebar merata jika logo sangat tinggi --}}
+                        <div class="space-y-4">
+                            <a href="/" class="inline-block">
+                                <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-wide">MESULUH</h2>
+                            </a>
+                            <p class="font-sans text-sm md:text-base opacity-80 leading-relaxed max-w-sm">
+                                Merawat hingga meruwat kehidupan. Media organik yang membahas kisah-kisah perempuan Bali dari sudut ke sudut dengan jujur dan mendalam.
+                            </p>
+                        </div>
+                        
+                        <div class="flex gap-4 pt-6">
+                            <a href="#" class="w-10 h-10 rounded-full border border-mesuluh-cream/30 flex items-center justify-center hover:bg-mesuluh-cream hover:text-mesuluh-primary transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full border border-mesuluh-cream/30 flex items-center justify-center hover:bg-mesuluh-cream hover:text-mesuluh-primary transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full border border-mesuluh-cream/30 flex items-center justify-center hover:bg-mesuluh-cream hover:text-mesuluh-primary transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
+                {{-- Kolom Rubrikasi --}}
                 <div class="md:col-span-3 md:pl-8 border-l border-white/10 md:border-none pl-0">
                     <h3 class="font-serif text-lg font-bold mb-6 text-mesuluh-cream/90 tracking-wider uppercase text-xs">Rubrikasi</h3>
                     <ul class="space-y-3 font-sans text-sm opacity-80">
@@ -180,6 +209,7 @@
                     </ul>
                 </div>
 
+                {{-- Kolom Tentang --}}
                 <div class="md:col-span-4">
                     <h3 class="font-serif text-lg font-bold mb-6 text-mesuluh-cream/90 tracking-wider uppercase text-xs">Tentang Mesuluh</h3>
                     <ul class="grid grid-cols-2 gap-3 font-sans text-sm opacity-80">
@@ -198,6 +228,7 @@
             </div>
         </div>
 
+        {{-- Bottom Bar --}}
         <div class="border-t border-white/10 bg-black/10">
             <div class="container mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-xs opacity-50 font-sans">
                 <p>&copy; {{ date('Y') }} Mesuluh. All rights reserved.</p>
@@ -208,7 +239,6 @@
                 </div>
             </div>
         </div>
-
     </footer>
 
     <div x-data="{ showBackToTop: false }" 

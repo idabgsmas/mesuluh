@@ -53,6 +53,7 @@
 
                     <div class="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl bg-gray-100 border border-gray-100">
                         <img src="https://haluanindonesia.co.id/wp-content/uploads/2023/08/IMG-20230825-WA0029.jpg" 
+                        {{-- <img src="{{ asset('images/logo-mesuluh.png') }}"  --}}
                              alt="Perempuan Bali" class="w-full h-full object-cover hover:scale-105 transition duration-700">
                         
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
