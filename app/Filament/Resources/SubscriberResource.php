@@ -26,7 +26,7 @@ class SubscriberResource extends Resource
     protected static ?int $navigationSort = 1;
 
     // Label Model
-    protected static ?string $recordTitleAttribute = 'Pelanggan';
+    protected static ?string $recordTitleAttribute = 'email';
     protected static ?string $modelLabel = 'Pelanggan';
     protected static ?string $pluralModelLabel = 'Pelanggan';
 
@@ -104,5 +104,17 @@ class SubscriberResource extends Resource
             'create' => Pages\CreateSubscriber::route('/create'),
             'edit' => Pages\EditSubscriber::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        // Menghitung user yang daftar HARI INI
+        return static::getModel()::whereDate('created_at', now())->count() ?: null;
+    }
+    
+    // Kita kasih warna Biru (info) untuk pelanggan baru
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'danger';
     }
 }

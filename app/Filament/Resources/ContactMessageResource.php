@@ -20,7 +20,7 @@ class ContactMessageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
     protected static ?string $navigationLabel = 'Kotak Masuk';
-    protected static ?string $recordTitleAttribute = 'Kotak Masuk';
+    protected static ?string $recordTitleAttribute = 'subject';
     protected static ?string $modelLabel = 'Kotak Masuk';
     protected static ?string $pluralModelLabel = 'Kotak Masuk';
     protected static ?string $navigationGroup = 'Interaksi Pembaca';
@@ -159,5 +159,17 @@ class ContactMessageResource extends Resource
             'index' => Pages\ListContactMessages::route('/'),
             // Kita HAPUS halaman Create dan Edit agar Admin tidak bisa buat/edit pesan palsu
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        // Asumsi: ada kolom 'is_read' atau 'status' di database
+        // false / 0 artinya belum dibaca
+        return static::getModel()::where('is_read', false)->count() ?: null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'danger'; // Merah biar admin sadar ada pesan masuk
     }
 }

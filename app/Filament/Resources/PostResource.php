@@ -42,7 +42,7 @@ class PostResource extends Resource
     protected static ?int $navigationSort = 1;
 
     // Label Model
-    protected static ?string $recordTitleAttribute = 'Tulisan';
+    protected static ?string $recordTitleAttribute = 'title';
     protected static ?string $modelLabel = 'Tulisan';
     protected static ?string $pluralModelLabel = 'Tulisan';
 
@@ -315,5 +315,19 @@ class PostResource extends Resource
         }
 
         return $query;
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        // Asumsi: status_id 2 adalah "Menunggu Review/Pending"
+        // Jika hitungannya 0, kita return null agar badge hilang (tidak semak)
+        return static::getModel()::where('status_id', 2)->count() ?: null;
+    }
+
+    // Mengatur Warna (Merah jika ada antrian)
+    public static function getNavigationBadgeColor(): ?string
+    {
+        // Jika ada lebih dari 0 antrian, warnanya 'danger' (merah), kalau tidak 'gray'
+        return static::getModel()::where('status_id', 2)->count() > 0 ? 'danger' : 'gray';
     }
 }

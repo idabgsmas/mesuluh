@@ -30,7 +30,7 @@ class RoleResource extends Resource
     protected static ?int $navigationSort = 2;
 
     // Label Model
-    protected static ?string $recordTitleAttribute = 'Peran Pengguna';
+    protected static ?string $recordTitleAttribute = 'name';
     protected static ?string $modelLabel = 'Peran Pengguna';
     protected static ?string $pluralModelLabel = 'Peran Pengguna';
 

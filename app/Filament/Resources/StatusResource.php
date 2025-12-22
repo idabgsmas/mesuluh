@@ -31,7 +31,7 @@ class StatusResource extends Resource
     protected static ?int $navigationSort = 4;
 
     // Label Model
-    protected static ?string $recordTitleAttribute = 'Status Tulisan';
+    protected static ?string $recordTitleAttribute = 'name';
     protected static ?string $modelLabel = 'Status Tulisan';
     protected static ?string $pluralModelLabel = 'Status Tulisan';
 

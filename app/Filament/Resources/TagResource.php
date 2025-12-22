@@ -26,7 +26,7 @@ class TagResource extends Resource
     protected static ?int $navigationSort = 3;
 
     // Label Model
-    protected static ?string $recordTitleAttribute = 'Tag Tulisan';
+    protected static ?string $recordTitleAttribute = 'name';
     protected static ?string $modelLabel = 'Tag Tulisan';
     protected static ?string $pluralModelLabel = 'Tag Tulisan';
 

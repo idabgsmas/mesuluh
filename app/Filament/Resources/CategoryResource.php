@@ -31,7 +31,7 @@ class CategoryResource extends Resource
     protected static ?int $navigationSort = 2;
 
     // Label Model
-    protected static ?string $recordTitleAttribute = 'Kategori Tulisan';
+    protected static ?string $recordTitleAttribute = 'name';
     protected static ?string $modelLabel = 'Kategori Tulisan';
     protected static ?string $pluralModelLabel = 'Kategori Tulisan';
 
