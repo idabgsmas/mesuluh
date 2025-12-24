@@ -13,7 +13,9 @@ class ListTags extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Buat Tag Tulisan Baru')
+                ->icon('heroicon-o-plus'),
         ];
     }
 }

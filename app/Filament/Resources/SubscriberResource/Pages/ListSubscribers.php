@@ -13,7 +13,9 @@ class ListSubscribers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Pelanggan Baru')
+                ->icon('heroicon-o-plus'),
         ];
     }
 }

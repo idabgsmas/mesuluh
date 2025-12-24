@@ -51,7 +51,8 @@
                 {{-- Tag Logo --}}
                 <img src="{{ asset('images/logo-mesuluh.png') }}" 
                     alt="Logo Mesuluh" 
-                    class="h-12 w-auto object-contain">
+                    class="h-12 w-auto object-contain"
+                    :class="scrolled ? 'filter brightness-0 invert' : ''">
                 
                 {{-- Teks Brand (Tetap Ada) --}}
                 <span class="font-serif text-3xl font-bold tracking-wide transition-colors duration-300"
@@ -169,7 +170,7 @@
                 <div class="md:col-span-5 flex items-stretch gap-8"> {{-- Ganti items-start menjadi items-stretch, gap diperbesar sedikit --}}
     
                     {{-- Logo Mesuluh --}}
-                    <img src="{{ asset('images/logo-mesuluh.png') }}" 
+                    <img src="{{ asset('images/logo-mesuluh-white.png') }}" 
                         alt="Logo Mesuluh" 
                         class="h-full w-32 md:w-40 object-contain shrink-0"> {{-- h-full supaya mengikuti tinggi teks, object-contain supaya tidak gepeng --}}
 

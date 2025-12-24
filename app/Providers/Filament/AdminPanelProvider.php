@@ -31,8 +31,8 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('images/favicon.ico'))
             ->brandName('MESULUH')
             ->brandLogo(asset('images/logo-mesuluh.png'))
-            // ->darkModeBrandLogo(asset('images/logo-mesuluh-light.png'))
-            ->brandLogoHeight('4rem')
+            ->darkModeBrandLogo(asset('images/logo-mesuluh-white.png'))
+            ->brandLogoHeight('3.5rem')
             ->userMenuItems([
                 'profile' => MenuItem::make()
                     ->label(fn () => auth()->user() 
