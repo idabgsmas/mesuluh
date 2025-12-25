@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->favicon(asset('images/favicon.ico'))
+            ->favicon(asset('images/logo-mesuluh-white.png'))
             ->brandName('MESULUH')
             ->brandLogo(asset('images/logo-mesuluh.png'))
             ->darkModeBrandLogo(asset('images/logo-mesuluh-white.png'))
@@ -42,6 +42,8 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-m-user-circle'),
             ])
             ->sidebarCollapsibleOnDesktop()
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->profile()
             ->login()
             ->colors([
