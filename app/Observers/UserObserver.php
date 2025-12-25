@@ -21,7 +21,7 @@ class UserObserver
     public function updated(User $user): void
     {
         // Security: Notifikasi jika Password atau Role berubah
-        if ($user->isDirty('password') || $user->isDirty('role_id')) {
+        if ($user->wasChanged('password') || $user->wasChanged('role_id')) {
             Notification::make()
                 ->title('Keamanan Akun')
                 ->body('Data sensitif akun Anda (Password/Role) baru saja diperbarui. Jika ini bukan Anda, segera hubungi Admin.')

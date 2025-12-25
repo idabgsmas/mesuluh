@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\PostView;
+use App\Models\Post;
+use App\Models\User;
 use Filament\Notifications\Notification;
 
 class PostViewObserver
