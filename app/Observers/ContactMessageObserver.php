@@ -17,7 +17,7 @@ class ContactMessageObserver
         $admin = User::where('role_id', 1)->get();
         Notification::make()
             ->title('Pesan Masuk Baru')
-            ->body("Dari: **{$message->name}**. Perihal: {$message->subject}")
+            ->body("Dari: \"{$message->name}\". Perihal: \"{$message->subject}\".")
             ->icon('heroicon-o-envelope')
             ->actions([
                 Action::make('read')->url("/admin/contact-messages"),

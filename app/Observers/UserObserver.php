@@ -13,7 +13,7 @@ class UserObserver
         $admins = User::where('role_id', 1)->get();
         Notification::make()
             ->title('Rekan Baru Bergabung')
-            ->body("**{$user->name}** telah bergabung sebagai {$user->role->name}.")
+            ->body("\"{$user->name}\" telah bergabung sebagai \"{$user->role->name}\".")
             ->icon('heroicon-o-user-plus')
             ->sendToDatabase($admins);
     }

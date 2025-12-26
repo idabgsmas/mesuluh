@@ -18,7 +18,7 @@ class PostViewObserver
         if (in_array($viewCount, [100, 500, 1000])) {
             Notification::make()
                 ->title('Pencapaian Baru!')
-                ->body("Keren! Tulisan Anda **{$post->title}** telah dibaca sebanyak **{$viewCount}** kali.")
+                ->body("Keren! Tulisan Anda \"{$post->title}\" telah dibaca sebanyak {$viewCount} kali.")
                 ->icon('heroicon-o-fire')
                 ->iconColor('warning')
                 ->sendToDatabase($post->user);

@@ -33,7 +33,7 @@ class RemindPendingPosts extends Command
             $admins = \App\Models\User::whereIn('role_id', [1, 2])->get();
             \Filament\Notifications\Notification::make()
                 ->title('Colekan Editor: Tulisan Terbengkalai')
-                ->body("Tulisan **{$post->title}** sudah menunggu review lebih dari 24 jam.")
+                ->body("Tulisan \"{$post->title}\" sudah menunggu review lebih dari 24 jam.")
                 ->sendToDatabase($admins);
         }
     }

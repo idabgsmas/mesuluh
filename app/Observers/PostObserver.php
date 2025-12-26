@@ -36,7 +36,7 @@ class PostObserver
                 case 3: // Published / Terbit
                     Notification::make()
                         ->title('Tulisan Telah Terbit!')
-                        ->body("Selamat! Tulisan **{$post->title}** sudah tayang.")
+                        ->body("Selamat! Tulisan \"{$post->title}\" sudah tayang.")
                         ->icon('heroicon-o-check-circle')
                         ->success()
                         ->sendToDatabase($penulis);
@@ -45,7 +45,7 @@ class PostObserver
                 case 4: // Revision / Revisi
                     Notification::make()
                         ->title('Perlu Revisi')
-                        ->body("Tulisan **{$post->title}**: " . ($post->revision_notes ?? 'Cek catatan revisi.'))
+                        ->body("Tulisan \"{$post->title}\": " . ($post->revision_notes ?? 'Cek catatan revisi.'))
                         ->icon('heroicon-o-pencil-square')
                         ->warning()
                         ->sendToDatabase($penulis);
@@ -55,7 +55,7 @@ class PostObserver
                     if ($post->getOriginal('status_id') == 3) {
                         Notification::make()
                             ->title('Tulisan Di-takedown')
-                            ->body("Tulisan **{$post->title}** ditarik dari publikasi.")
+                            ->body("Tulisan \"{$post->title}\" ditarik dari publikasi.")
                             ->icon('heroicon-o-arrow-down-tray')
                             ->danger()
                             ->sendToDatabase($penulis);
@@ -75,7 +75,7 @@ class PostObserver
         if ($recipients->count() > 0) {
             Notification::make()
                 ->title($title)
-                ->body("Tulisan **{$post->title}** diajukan oleh **{$post->user->name}**.")
+                ->body("Tulisan \"{$post->title}\" diajukan oleh \"{$post->user->name}\".")
                 ->warning()
                 ->actions([
                     Action::make('review')->url("/admin/posts/{$post->id}/edit")

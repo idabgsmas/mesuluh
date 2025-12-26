@@ -17,7 +17,7 @@ class SubscriberObserver
         $admin = User::where('role_id', 1)->get();
         Notification::make()
             ->title('Pelanggan Baru')
-            ->body("Email **{$subscriber->email}** baru saja berlangganan Mesuluh.")
+            ->body("Email \"{$subscriber->email}\" baru saja berlangganan Mesuluh.")
             ->icon('heroicon-o-user-plus')
             ->sendToDatabase($admin);
     }
