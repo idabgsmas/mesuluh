@@ -215,6 +215,8 @@
 
                             <div class="flex flex-col flex-grow">
                                 <div class="text-xs text-gray-400 mb-2 font-sans flex items-center gap-2">
+                                    <span class="text-mesuluh-primary">{{ $post->user->name }}</span>
+                                    <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
                                     <span>{{ $post->published_at->format('d M Y') }}</span>
                                     <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
                                     <span>{{ $post->views }} x dibaca</span>
@@ -264,6 +266,7 @@
                                                 {{ $pop->title }}
                                             </h4>
                                         </a>
+                                        <span class="text-xs text-gray-500 mt-1 block">{{ $pop->user->name }} | {{ $pop->published_at->format('d M Y') }}</span>
                                         <span class="text-xs text-gray-500 mt-1 block">{{ $pop->views }} Pembaca</span>
                                     </div>
                                 </div>
@@ -353,6 +356,8 @@
                                     </h3>
                                     
                                     <div class="flex justify-between items-center mt-3 pt-3 border-t border-white/10">
+                                        {{-- <span class="text-xs opacity-60 font-sans">{{ $post->user->name }}</span> --}}
+                                        {{-- <span class="w-1 h-1 bg-gray-300 rounded-full"></span> --}}
                                         <span class="text-xs opacity-60 font-sans">{{ $post->published_at->format('d M Y') }}</span>
                                         <span class="text-xs font-bold text-mesuluh-cream opacity-0 group-hover:opacity-100 transition transform translate-x-2 group-hover:translate-x-0">
                                             Baca &rarr;

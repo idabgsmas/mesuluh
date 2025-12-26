@@ -44,6 +44,8 @@
                                           class="text-white px-2 py-1 rounded">
                                         {{ $category->name }}
                                     </span>
+                                    <span>{{ $featured->user->name }}</span>
+                                    <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
                                     <span>{{ $featured->published_at->format('d M Y') }}</span>
                                 </div>
                                 <a href="{{ route('posts.show', $featured) }}">
@@ -134,7 +136,8 @@
                                             {{ $choice->title }}
                                         </h4>
                                     </a>
-                                    <span class="text-xs text-gray-400 mt-1 block">{{ $choice->published_at->format('d M Y') }}</span>
+                                    <span class="text-xs text-gray-400 mt-1 block">{{ $choice->user->name }} | {{ $choice->published_at->format('d M Y') }}</span>
+                                    {{-- <span class="text-xs text-gray-400 mt-1 block">{{ $choice->user->name }}</span> --}}
                                 </div>
                             </article>
                         @empty
