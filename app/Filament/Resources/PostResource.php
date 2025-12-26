@@ -96,13 +96,28 @@ class PostResource extends Resource
                                     ->disabled(fn ($record) => $record?->status_id === 5),
                             ]),
                         
-                        Section::make('SEO & Meta')
+                        Section::make('SEO Metadata')
+                            ->description('Atur bagaimana tulisan ini muncul di Google dan Media Sosial')
+                            ->collapsible() // Bisa di-expand/collapse
+                            ->disabled(fn ($record) => $record?->status_id === 5)
                             ->schema([
-                                TextInput::make('seo_title')->label('Judul SEO (Opsional)'),
-                                Textarea::make('seo_description')->label('Deskripsi SEO (Opsional)'),
-                            ])
-                            ->collapsed() // Bisa dilipat biar gak menuhin layar
-                            ->disabled(fn ($record) => $record?->status_id === 5),
+                                Forms\Components\TextInput::make('seo_title')
+                                    ->label('Judul SEO')
+                                    ->helperText('Jika dikosongkan, akan menggunakan judul asli tulisan.')
+                                    ->maxLength(60),
+                                    
+                                Textarea::make('seo_description')
+                                    ->label('Deskripsi SEO (Meta Description)')
+                                    ->helperText('Ringkasan pendek (rekomendasi 150-160 karakter) untuk hasil pencarian Google.')
+                                    ->rows(3)
+                                    ->maxLength(160),
+
+                                FileUpload::make('seo_image')
+                                    ->label('Gambar Preview Medsos (Open Graph)')
+                                    ->image()
+                                    ->directory('seo-previews')
+                                    ->helperText('Gambar yang akan muncul saat link dibagikan ke WA/FB/IG.'),
+                            ]),
                     ])
                     ->columnSpan(['lg' => 2]), // Lebar 2/3 layar
 

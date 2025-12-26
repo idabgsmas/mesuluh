@@ -4,11 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>{{ $title ?? 'Mesuluh' }} - Merawat Kehidupan</title>
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
-    
-    <meta name="description" content="{{ $description ?? 'Media organik yang membahas kisah perempuan Bali dengan jujur.' }}">
+
+    {{-- SEO DINAMIS --}}
+    @hasSection('seo')
+        @yield('seo')
+    @else
+        <title>{{ $title ?? 'Mesuluh' }} - Merawat Kehidupan</title>
+        <meta name="description" content="{{ $description ?? 'Media organik yang membahas kisah perempuan Bali dengan jujur.' }}">
+    @endif
     
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
@@ -27,6 +31,7 @@
     {{-- *Penjelasan:* Kode di atas menggunakan variabel `$description` dan `$image`. Jika halaman tersebut tidak mengirim data (misal halaman Beranda), dia akan pakai teks default. --}}
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body class="bg-mesuluh-cream text-mesuluh-dark font-sans antialiased">
 

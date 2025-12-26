@@ -25,6 +25,7 @@ class Post extends Model
         'views',
         'seo_title',
         'seo_description',
+        'seo_image',
     ];
 
     protected $casts = [
@@ -57,5 +58,11 @@ class Post extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    // 5. Relasi ke PostViews
+    public function views(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PostView::class);
     }
 }

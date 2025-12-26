@@ -1,3 +1,14 @@
+@section('seo')
+    <title>{{ $post->seo_title ?? $post->title }} | Mesuluh</title>
+    <meta name="description" content="{{ $post->seo_description ?? Str::limit(strip_tags($post->content), 150) }}">
+    
+    <meta property="og:title" content="{{ $post->seo_title ?? $post->title }}">
+    <meta property="og:description" content="{{ $post->seo_description ?? Str::limit(strip_tags($post->content), 150) }}">
+    <meta property="og:image" content="{{ $post->seo_image ? asset('storage/'.$post->seo_image) : asset('storage/'.$post->thumbnail) }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="article">
+@endsection
+
 <x-layouts.app 
     :title="$post->title"
     :description="$post->excerpt"
