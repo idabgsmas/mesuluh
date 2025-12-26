@@ -29,7 +29,7 @@
             
             <div class="flex items-center justify-center gap-2 mb-6">
                 <span class="px-3 py-1 bg-mesuluh-primary/10 text-mesuluh-primary text-xs font-bold uppercase tracking-widest rounded-full">
-                    Penulis Mesuluh
+                    {{ $author->role->name . ' Mesuluh' }}
                 </span>
             </div>
 
