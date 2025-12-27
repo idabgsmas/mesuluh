@@ -2,19 +2,20 @@
 
 namespace App\Observers;
 
-use App\Models\Post;
-use App\Models\User;
-use App\Models\Subscriber;
 use App\Models\ContactMessage;
+use App\Models\User;
+use App\Mail\AdminContactMail; // Import mail
+use Illuminate\Support\Facades\Mail; // Import Facade
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 
 class ContactMessageObserver
 {
-    // Skenario: Pesan kontak masuk dari pengunjung situs
     public function created(ContactMessage $message): void
     {
-        $admin = User::where('role_id', 1)->get();
+        $admins = User::where('role_id', 1)->get();
+
+        // 1. Notifikasi Database (Lonceng)
         Notification::make()
             ->title('Pesan Masuk Baru')
             ->body("Dari: \"{$message->name}\". Perihal: \"{$message->subject}\".")
@@ -22,7 +23,11 @@ class ContactMessageObserver
             ->actions([
                 Action::make('read')->url("/admin/contact-messages"),
             ])
-            ->sendToDatabase($admin);
-    }
+            ->sendToDatabase($admins);
 
+        // 2. Kirim Email ke Admin
+        if ($admins->count() > 0) {
+            Mail::to($admins)->send(new AdminContactMail($message));
+        }
+    }
 }

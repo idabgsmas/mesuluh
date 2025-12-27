@@ -270,7 +270,8 @@ class PostResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('user.name')
                     ->label('Penulis')
-                    ->relationship('user', 'name'),
+                    ->relationship('user', 'name')
+                    ->hidden(fn () => auth()->user()->isPenulis()), // Sembunyikan filter untuk Penulis sendiri,
                 Tables\Filters\SelectFilter::make('category')
                     ->label('Kategori')
                     ->relationship('category', 'name'),

@@ -344,21 +344,21 @@
                          x-transition:enter-end="opacity-100 translate-y-0"
                          class="flex flex-col gap-10"> <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             @foreach($category->posts as $post)
-                                <a href="{{ route('posts.show', $post) }}" class="group block bg-white/5 rounded-xl p-3 border border-white/5 hover:bg-white/10 transition duration-300">
+                                <a href="{{ route('posts.show', $post) }}" class="group block bg-mesuluh-cream rounded-xl p-3 border border-white/5 hover:bg-white/10 transition duration-300">
                                     <div class="aspect-[4/3] overflow-hidden rounded-lg mb-4 relative">
                                          <img src="{{ asset('storage/' . $post->thumbnail) }}" 
                                              class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 opacity-90 group-hover:opacity-100">
                                          <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
                                     </div>
                                     
-                                    <h3 class="font-serif text-lg leading-snug mb-2 group-hover:text-mesuluh-cream text-white/90">
+                                    <h3 class="font-serif text-lg leading-snug mb-2 group-hover:text-mesuluh-cream text-mesuluh-primary">
                                         {{ $post->title }}
                                     </h3>
                                     
-                                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-white/10">
+                                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-black/10">
                                         {{-- <span class="text-xs opacity-60 font-sans">{{ $post->user->name }}</span> --}}
                                         {{-- <span class="w-1 h-1 bg-gray-300 rounded-full"></span> --}}
-                                        <span class="text-xs opacity-60 font-sans">{{ $post->published_at->format('d M Y') }}</span>
+                                        <span class="text-xs opacity-60 font-sans group-hover:text-mesuluh-cream text-black/90">{{ $post->published_at->format('d M Y') }}</span>
                                         <span class="text-xs font-bold text-mesuluh-cream opacity-0 group-hover:opacity-100 transition transform translate-x-2 group-hover:translate-x-0">
                                             Baca &rarr;
                                         </span>

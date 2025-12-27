@@ -2,24 +2,28 @@
 
 namespace App\Observers;
 
-use App\Models\Post;
-use App\Models\User;
 use App\Models\Subscriber;
-use App\Models\ContactMessage;
+use App\Models\User;
+use App\Mail\AdminSubscriberMail; // Import mail
+use Illuminate\Support\Facades\Mail; // Import Facade
 use Filament\Notifications\Notification;
-use Filament\Notifications\Actions\Action;
 
 class SubscriberObserver
 {
-    // Skenario: Pelanggan baru berlangganan newsletter
     public function created(Subscriber $subscriber): void
     {
-        $admin = User::where('role_id', 1)->get();
+        $admins = User::where('role_id', 1)->get();
+
+        // 1. Notifikasi Database (Lonceng)
         Notification::make()
             ->title('Pelanggan Baru')
             ->body("Email \"{$subscriber->email}\" baru saja berlangganan Mesuluh.")
             ->icon('heroicon-o-user-plus')
-            ->sendToDatabase($admin);
-    }
+            ->sendToDatabase($admins);
 
+        // 2. Kirim Email ke Admin
+        if ($admins->count() > 0) {
+            Mail::to($admins)->send(new AdminSubscriberMail($subscriber));
+        }
+    }
 }

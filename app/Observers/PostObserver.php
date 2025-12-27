@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Mail\PostNotificationMail; // Import Class Mail tadi
+use Illuminate\Support\Facades\Mail; // Import Facade Mail
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 
@@ -40,6 +42,8 @@ class PostObserver
                         ->icon('heroicon-o-check-circle')
                         ->success()
                         ->sendToDatabase($penulis);
+                        // Kirim Email Notifikasi ke Penulis
+                    Mail::to($penulis->email)->send(new PostNotificationMail($post, 'Tulisan Telah Terbit!')); // <--- TAMBAHKAN INI (masih error)
                     break;
 
                 case 4: // Revision / Revisi
@@ -49,6 +53,17 @@ class PostObserver
                         ->icon('heroicon-o-pencil-square')
                         ->warning()
                         ->sendToDatabase($penulis);
+                    Mail::to($penulis->email)->send(new PostNotificationMail($post, 'Perlu Revisi', "Tulisan \"{$post->title}\": " . ($post->revision_notes ?? 'Cek catatan revisi.')));
+                    break;
+                
+                case 5: // Ditolak / Rejected
+                    Notification::make()
+                        ->title('Tulisan Ditolak')
+                        ->body("Tulisan \"{$post->title}\": " . ($post->revision_notes ?? 'Cek catatan ditolak.'))
+                        ->icon('heroicon-o-x-circle')
+                        ->danger()
+                        ->sendToDatabase($penulis);
+                    Mail::to($penulis->email)->send(new PostNotificationMail($post, 'Tulisan Ditolak', "Tulisan \"{$post->title}\": " . ($post->revision_notes ?? 'Cek catatan ditolak.')));
                     break;
 
                 case 1: // Draft / Takedown (Jika sebelumnya Published)
@@ -58,7 +73,8 @@ class PostObserver
                             ->body("Tulisan \"{$post->title}\" ditarik dari publikasi.")
                             ->icon('heroicon-o-arrow-down-tray')
                             ->danger()
-                            ->sendToDatabase($penulis);
+                            ->sendToDatabase($penulis)
+                            ->sendToMail($penulis); // <--- TAMBAHKAN INI
                     }
                     break;
             }
@@ -81,6 +97,8 @@ class PostObserver
                     Action::make('review')->url("/admin/posts/{$post->id}/edit")
                 ])
                 ->sendToDatabase($recipients);
+            // 2. Kirim Email Asli
+            Mail::to($recipients)->send(new PostNotificationMail($post, $title , "Tulisan \"{$post->title}\" diajukan oleh \"{$post->user->name}\"."));
         }
     }
 }
