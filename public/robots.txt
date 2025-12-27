@@ -1,2 +1,3 @@
 User-agent: *
 Disallow:
+Sitemap: https://mesuluh.com/sitemap.xml

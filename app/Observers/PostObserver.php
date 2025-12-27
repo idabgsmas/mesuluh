@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use Illuminate\Support\Facades\Artisan;
 use App\Models\Post;
 use App\Models\User;
 use App\Mail\PostNotificationMail; // Import Class Mail tadi
@@ -78,6 +79,7 @@ class PostObserver
                     }
                     break;
             }
+            Artisan::call('sitemap:generate');
         }
     }
 

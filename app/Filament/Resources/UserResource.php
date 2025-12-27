@@ -57,7 +57,8 @@ class UserResource extends Resource
                     ->label('Email')
                     ->email()
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true), // Pastikan unik
                 Forms\Components\Select::make('role_id')
                     ->label('Peran Pengguna')
                     ->relationship('role', 'name') // Ambil relasi 'role', tampilkan kolom 'name'

@@ -28,6 +28,9 @@ use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\PostResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PostResource\RelationManagers;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class PostResource extends Resource
 {
@@ -116,10 +119,27 @@ class PostResource extends Resource
                                     ->label('Gambar Preview Medsos (Open Graph)')
                                     ->image()
                                     ->directory('seo-previews')
-                                    ->helperText('Gambar yang akan muncul saat link dibagikan ke WA/FB/IG.'),
+                                    ->helperText('Gambar yang akan muncul saat link dibagikan ke WA/FB/IG.')
+                                    ->imageEditor()
+                                    // PROSES KONVERSI DI SINI:
+                                    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                                        $filename = Str::uuid() . '.webp';
+                                        $path = 'seo-previews/' . $filename;
+
+                                        $image = Image::read($file->getRealPath());
+                                        
+                                        // Crop/Resize standar medsos (1200x630)
+                                        $image->cover(1200, 630);
+
+                                        Storage::disk('public')->put($path, (string) $image->toWebp(80));
+
+                                        return $path;
+                                    })
+                                    ->disabled(fn ($record) => $record?->status_id === 5),
                             ]),
                     ])
-                    ->columnSpan(['lg' => 2]), // Lebar 2/3 layar
+                    ->columnSpan(['lg' => 2]) // Lebar 2/3 layar
+                    ->disabled(fn ($record) => $record?->status_id === 5),
 
                 // --- KOLOM KANAN (30% Layar) ---
                 Group::make()
@@ -131,6 +151,23 @@ class PostResource extends Resource
                                     ->image()
                                     ->directory('posts/thumbnails') // Folder penyimpanan
                                     ->required()
+                                    ->imageEditor()
+                                    // PROSES KONVERSI DI SINI:
+                                    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                                        $filename = Str::uuid() . '.webp';
+                                        $path = 'posts/thumbnails/' . $filename;
+
+                                        // Baca file dari temporary storage Livewire
+                                        $image = Image::read($file->getRealPath());
+                                        
+                                        // Resize proporsional (Lebar 1200px)
+                                        $image->scale(width: 1200);
+
+                                        // Simpan ke disk 'public' dengan format WebP
+                                        Storage::disk('public')->put($path, (string) $image->toWebp(80));
+
+                                        return $path; // Kembalikan path baru (.webp) untuk disimpan di DB
+                                    })
                                     ->disabled(fn ($record) => $record?->status_id === 5),
 
                                 Select::make('category_id')

@@ -117,7 +117,7 @@ Route::get('/indeks', [PostController::class, 'index'])->name('posts.search');
 
 // Route untuk halaman detail tulisan
 // {post:slug} artinya kita mencari tulisan berdasarkan 'slug' (URL), bukan ID.
-Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/tulisan/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 
 // Route untuk menyimpan subscriber
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe.store');
