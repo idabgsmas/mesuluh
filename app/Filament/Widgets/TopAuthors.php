@@ -25,9 +25,9 @@ class TopAuthors extends BaseWidget
             ->query(
                 User::query()
                     ->whereIn('role_id', [2, 3]) // Ambil Editor & Penulis saja
-                    ->withCount('posts') // Hitung jumlah tulisan
-                    ->withSum('posts', 'views') // Hitung total views
-                    ->orderByDesc('posts_sum_views') // Urutkan dari yang paling banyak dibaca
+                    ->withCount(['posts as published_posts_count' => fn ($query) => $query->where('status_id', 3)])
+                    ->withSum(['posts as total_views' => fn ($query) => $query->where('status_id', 3)], 'views')
+                    ->orderBy('total_views', 'desc')
                     ->limit(5)
             )
             ->columns([
@@ -36,19 +36,41 @@ class TopAuthors extends BaseWidget
                 //     ->label(''),
                 
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama')
+                    ->label('Penulis')
                     ->weight('bold'),
                     
-                Tables\Columns\TextColumn::make('posts_count')
+                // Tables\Columns\TextColumn::make('posts_count')
+                //     ->label('Tulisan')
+                //     ->badge()
+                //     ->color('gray'),
+                
+                Tables\Columns\TextColumn::make('published_posts_count')
                     ->label('Tulisan')
+                    ->alignCenter(),
+                
+                // KOLOM ENGAGEMENT:
+                Tables\Columns\TextColumn::make('engagement_rate')
+                    ->label('Rata-rata Pembaca')
+                    ->state(function ($record) {
+                        return $record->published_posts_count > 0 
+                            ? number_format($record->total_views / $record->published_posts_count, 1) 
+                            : 0;
+                    })
                     ->badge()
-                    ->color('gray'),
+                    ->color('info')
+                    ->alignEnd(),
 
-                Tables\Columns\TextColumn::make('posts_sum_views')
+                Tables\Columns\TextColumn::make('total_views')
                     ->label('Total Dibaca')
-                    ->badge()
-                    ->color('success')
-                    ->formatStateUsing(fn ($state) => number_format($state)),
+                    ->formatStateUsing(fn ($state) => number_format($state ?? 0))
+                    ->alignEnd()
+                    ->color('success'),
+
+                // Tables\Columns\TextColumn::make('posts_sum_views')
+                //     ->label('Total Dibaca')
+                //     ->badge()
+                //     ->color('success')
+                //     ->formatStateUsing(fn ($state) => number_format($state)),
             ])
             ->paginated(false);
     }

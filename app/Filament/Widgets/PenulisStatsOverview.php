@@ -21,6 +21,13 @@ class PenulisStatsOverview extends BaseWidget
     {
         $userId = auth()->id();
 
+        // Hitung data dasar
+        $totalPublished = Post::where('user_id', $userId)->where('status_id', 3)->count();
+        $totalViews = Post::where('user_id', $userId)->sum('views');
+        
+        // Hitung Rata-rata (Engagement)
+        $averageViews = $totalPublished > 0 ? ($totalViews / $totalPublished) : 0;
+
         return [
             Stat::make('Tulisan Terbit', Post::where('user_id', $userId)->where('status_id', 3)->count())
                 ->description('Artikel Anda yang sudah tayang')
@@ -31,6 +38,12 @@ class PenulisStatsOverview extends BaseWidget
                 ->description('Orang membaca tulisan Anda')
                 ->descriptionIcon('heroicon-m-eye')
                 ->color('primary'),
+
+            // METRIK ENGAGEMENT BARU:
+            Stat::make('Rata-rata Pembaca', number_format($averageViews, 1))
+                ->description('Views per tulisan (Engagement)')
+                ->descriptionIcon('heroicon-m-chart-bar')
+                ->color($averageViews > 100 ? 'success' : 'info'), // Contoh threshold warna
 
             Stat::make('Dalam Antrean', Post::where('user_id', $userId)->whereIn('status_id', [1, 2, 4])->count())
                 ->description('Draft, Review, atau Revisi')

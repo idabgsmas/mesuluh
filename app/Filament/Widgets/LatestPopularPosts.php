@@ -13,7 +13,7 @@ class LatestPopularPosts extends BaseWidget
     
     // protected int | string | array $columnSpan = 'full'; // Memanjang penuh
     
-    protected static ?int $sort = 4; // Urutan ke-4
+    protected static ?int $sort = 5; // Urutan ke-4
 
     protected int | string | array $columnSpan = 'full';  // <--- HAPUS BARIS INI
 
