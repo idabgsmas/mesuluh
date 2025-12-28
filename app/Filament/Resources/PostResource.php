@@ -94,6 +94,8 @@ class PostResource extends Resource
                                 RichEditor::make('content')
                                     ->label('Isi Tulisan')
                                     ->required()
+                                    ->fileAttachmentsDisk('public')      // Tambahkan ini
+                                    ->fileAttachmentsVisibility('public') // Tambahkan ini
                                     ->fileAttachmentsDirectory('posts/content-images') // Simpan gambar konten di folder rapi
                                     ->columnSpanFull()
                                     ->disabled(fn ($record) => $record?->status_id === 5),

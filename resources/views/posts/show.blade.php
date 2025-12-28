@@ -64,7 +64,104 @@
                         {{ $post->excerpt }}
                     </p>
 
-                    {!! $post->content !!}
+                    {{-- {!! $post->content !!} --}}
+
+                    <div x-data="{ isOpen: false, imgSource: '', imgCaption: '' }" class="relative">
+    
+                        {{-- Konten Tulisan dengan Pencegah Klik Default --}}
+                        <div class="custom-content prose prose-lg max-w-none" 
+                            @click="
+                                let target = $event.target;
+                                {{-- Cari apakah yang diklik adalah IMG atau link yang berisi IMG --}}
+                                let clickableImg = target.tagName === 'IMG' ? target : target.closest('a')?.querySelector('img');
+                                
+                                if (clickableImg) {
+                                    {{-- STOP! Jangan buka tab baru --}}
+                                    $event.preventDefault(); 
+                                    $event.stopPropagation();
+                                    
+                                    imgSource = clickableImg.src;
+                                    {{-- Ambil caption dari figcaption terdekat --}}
+                                    imgCaption = clickableImg.closest('figure')?.querySelector('figcaption')?.innerText || '';
+                                    isOpen = true;
+                                }
+                            ">
+                            {!! $post->content !!}
+                        </div>
+
+                        {{-- Lightbox Modal (Pop-up) --}}
+                        <template x-teleport="body">
+                            <div x-show="isOpen" 
+                                x-transition.opacity.duration.300ms
+                                class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4"
+                                @click="isOpen = false"
+                                @keydown.window.escape="isOpen = false"
+                                style="display: none;">
+                                
+                                {{-- Tombol Tutup --}}
+                                <button class="absolute top-6 right-6 text-white text-5xl font-light hover:text-gray-400">&times;</button>
+                                
+                                <div class="relative max-w-5xl w-full flex flex-col items-center" @click.stop>
+                                    {{-- Gambar dalam Pop-up --}}
+                                    <img :src="imgSource" class="max-w-full max-h-[80vh] rounded shadow-2xl object-contain border border-white/10">
+                                    
+                                    {{-- Caption dalam Pop-up (Tengah Bawah) --}}
+                                    <div x-show="imgCaption" class="mt-6 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full">
+                                        <p x-text="imgCaption" class="text-white text-center text-sm md:text-base italic"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <style>
+                        /* 1. Paksa Container Utama Konten */
+                        .custom-content {
+                            width: 100% !important;
+                            max-width: 100% !important;
+                        }
+
+                        /* 2. Targetkan Figure dan Lampiran Gambar */
+                        .custom-content figure, 
+                        .custom-content .attachment,
+                        .custom-content .attachment--preview {
+                            display: block !important;
+                            margin: 2.5rem 0 !important; /* Jarak atas bawah, kiri kanan mepet */
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            padding: 0 !important;
+                            border: none !important;
+                        }
+
+
+                        /* 3. Paksa Gambar Memenuhi Lebar Kolom */
+                        .custom-content img {
+                            display: block !important;
+                            width: 100% !important; /* Gambar dipaksa selebar kolom teks */
+                            max-width: 100% !important;
+                            height: auto !important;
+                            border-radius: 0.75rem;
+                            cursor: zoom-in;
+                            margin: 0 !important;
+                            transition: opacity 0.3s ease;
+                        }
+
+                        .custom-content img:hover {
+                            opacity: 0.9; /* Efek halus saat disentuh mouse */
+                        }
+
+                        /* 4. Caption Tetap di Tengah Bawah Gambar */
+                        .custom-content figcaption {
+                            display: block !important;
+                            width: 100% !important;
+                            text-align: center !important; /* Teks caption di tengah */
+                            margin-top: 1rem !important;
+                            font-size: 0.9rem !important;
+                            color: #6b7280 !important;
+                            font-style: italic !important;
+                            padding: 0 1rem !important;
+                        }
+                    </style>
 
                 </article>
 
@@ -188,7 +285,35 @@
             </aside>
 
         </div>
+        {{-- Navigasi Next/Prev --}}
+        <div class="grid grid-cols-2 gap-4 py-8 border-t border-b border-gray-100 my-10">
+            {{-- Sebelumnya --}}
+            <div>
+                @if($prevPost)
+                    <a href="{{ route('posts.show', $prevPost->slug) }}" class="group block">
+                        <span class="text-xs text-gray-400 uppercase tracking-widest">Sebelumnya</span>
+                        <p class="font-bold text-gray-900 group-hover:text-mesuluh-primary transition line-clamp-1">
+                            ← {{ $prevPost->title }}
+                        </p>
+                    </a>
+                @endif
+            </div>
+
+            {{-- Selanjutnya --}}
+            <div class="text-right">
+                @if($nextPost)
+                    <a href="{{ route('posts.show', $nextPost->slug) }}" class="group block">
+                        <span class="text-xs text-gray-400 uppercase tracking-widest">Selanjutnya</span>
+                        <p class="font-bold text-gray-900 group-hover:text-mesuluh-primary transition line-clamp-1">
+                            {{ $nextPost->title }} →
+                        </p>
+                    </a>
+                @endif
+            </div>
+        </div>
     </div>
+
+    
 
     @if($relatedPosts->count() > 0)
     <section class="bg-gray-50 border-t border-gray-200 py-16">

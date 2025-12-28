@@ -61,11 +61,26 @@ class PostController extends Controller
             ->take(5)
             ->get();
 
+        // Cari tulisan selanjutnya (yang tanggal terbitnya lebih baru)
+        $nextPost = Post::where('published_at', '>', $post->published_at)
+            ->where('status_id', 3)
+            ->orderBy('published_at', 'asc')
+            ->first();
+
+        // Cari tulisan sebelumnya (yang tanggal terbitnya lebih lama)
+        $prevPost = Post::where('published_at', '<', $post->published_at)
+            ->where('status_id', 3)
+            ->orderBy('published_at', 'desc')
+            ->first();
+
         return view('posts.show', [
             'post' => $post,
             'relatedPosts' => $relatedPosts,
             'latestPosts' => $latestPosts, // Kirim data baru ini
+            'nextPost' => $nextPost,
+            'prevPost' => $prevPost,
         ]);
+        
     }
 
     /**
