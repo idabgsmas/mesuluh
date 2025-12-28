@@ -174,7 +174,8 @@
                         </a>
 
                         @foreach($post->tags as $tag)
-                            <a href="#" class="text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-600 hover:bg-mesuluh-primary hover:text-white transition">
+                            <a href="{{ route('tags.show', $tag->slug) }}" 
+                            class="inline-block px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-primary-50 hover:text-primary-600 transition">
                                 #{{ $tag->name }}
                             </a>
                         @endforeach

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\TagController;
 
 // Route untuk ganti bahasa
 Route::get('/lang/{locale}', function ($locale) {
@@ -121,3 +122,6 @@ Route::get('/tulisan/{post:slug}', [PostController::class, 'show'])->name('posts
 
 // Route untuk menyimpan subscriber
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe.store');
+
+// Route untuk menampilkan artikel berdasarkan Tag
+Route::get('/tag/{tag:slug}', [TagController::class, 'show'])->name('tags.show');

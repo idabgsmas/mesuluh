@@ -191,7 +191,7 @@
                         </div>
                         
                         <div class="flex gap-4 pt-6">
-                            <a href="#" class="w-10 h-10 rounded-full border border-mesuluh-cream/30 flex items-center justify-center hover:bg-mesuluh-cream hover:text-mesuluh-primary transition duration-300">
+                            <a href="https://www.instagram.com/mesuluh/" class="w-10 h-10 rounded-full border border-mesuluh-cream/30 flex items-center justify-center hover:bg-mesuluh-cream hover:text-mesuluh-primary transition duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                             </a>
                             <a href="#" class="w-10 h-10 rounded-full border border-mesuluh-cream/30 flex items-center justify-center hover:bg-mesuluh-cream hover:text-mesuluh-primary transition duration-300">
@@ -227,7 +227,7 @@
 
                     <div class="mt-8 p-4 bg-white/5 rounded-lg border border-white/5">
                         <p class="text-xs opacity-60 mb-1">Ada ide tulisan atau kolaborasi?</p>
-                        <a href="mailto:redaksi@mesuluh.com" class="text-sm font-bold hover:underline">redaksi@mesuluh.com</a>
+                        <a href="mailto:mesuluhproject@gmail.com" class="text-sm font-bold hover:underline">mesuluhproject@gmail.com</a>
                     </div>
                 </div>
 
