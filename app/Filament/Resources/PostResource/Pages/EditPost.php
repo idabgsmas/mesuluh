@@ -28,34 +28,65 @@ class EditPost extends EditRecord
                 }),
 
             // 2. ACTION EDITOR/ADMIN: PUBLISH (FAST TRACK)
+            // Actions\Action::make('publish')
+            //     ->label('Terbitkan')
+            //     ->icon('heroicon-m-check-badge')
+            //     ->color('success')
+            //     // PERUBAHAN DISINI:
+            //     // Muncul untuk Non-Penulis (Admin/Editor)
+            //     // DAN Statusnya boleh: Draft (1), Review (2), atau Revisi (4)
+            //     ->visible(fn () => !auth()->user()->isPenulis() && in_array($this->record->status_id, [1, 2, 4]))
+            //     ->action(function () {
+            //         // Cek data di database (apakah user sudah isi field published_at?)
+            //         $existingDate = $this->record->published_at;
+
+            //         // Logika Penentuan Tanggal:
+            //         // Jika user sudah set tanggal (misal dijadwalkan besok), GUNAKAN ITU.
+            //         // Jika user kosongkan (null), baru kita set 'now()'.
+            //         $publishDate = $existingDate ?? now();
+
+            //         $this->record->update([
+            //             'status_id' => 3, // Published
+            //             'published_at' => $publishDate,
+            //             'revision_notes' => null,
+            //         ]);
+            //         // Ubah pesan notifikasi agar lebih informatif
+            //         if ($publishDate > now()) {
+            //             Notification::make()->title('Tulisan dijadwalkan tayang pada ' . $publishDate->format('d M H:i'))->success()->send();
+            //         } else {
+            //             Notification::make()->title('Tulisan berhasil diterbitkan sekarang!')->success()->send();
+            //         }
+            //     }),
+            
             Actions\Action::make('publish')
                 ->label('Terbitkan')
                 ->icon('heroicon-m-check-badge')
                 ->color('success')
-                // PERUBAHAN DISINI:
-                // Muncul untuk Non-Penulis (Admin/Editor)
-                // DAN Statusnya boleh: Draft (1), Review (2), atau Revisi (4)
                 ->visible(fn () => !auth()->user()->isPenulis() && in_array($this->record->status_id, [1, 2, 4]))
                 ->action(function () {
-                    // Cek data di database (apakah user sudah isi field published_at?)
-                    $existingDate = $this->record->published_at;
+                    // 1. Ambil data terbaru dari form yang sedang dibuka
+                    $formData = $this->form->getState();
 
-                    // Logika Penentuan Tanggal:
-                    // Jika user sudah set tanggal (misal dijadwalkan besok), GUNAKAN ITU.
-                    // Jika user kosongkan (null), baru kita set 'now()'.
-                    $publishDate = $existingDate ?? now();
+                    // 2. Ambil nilai published_at dari form
+                    // Jika form kosong, maka otomatis pakai waktu sekarang (now())
+                    $publishDate = $formData['published_at'] ?? now();
 
+                    // 3. Update data ke database
                     $this->record->update([
-                        'status_id' => 3, // Published
+                        'status_id' => 3, // Set status ke Published
                         'published_at' => $publishDate,
                         'revision_notes' => null,
                     ]);
-                    // Ubah pesan notifikasi agar lebih informatif
-                    if ($publishDate > now()) {
-                        Notification::make()->title('Tulisan dijadwalkan tayang pada ' . $publishDate->format('d M H:i'))->success()->send();
-                    } else {
-                        Notification::make()->title('Tulisan berhasil diterbitkan sekarang!')->success()->send();
-                    }
+
+                    // 4. Sinkronisasi tampilan form agar status berubah tanpa reload
+                    $this->refreshFormData(['status_id', 'published_at', 'revision_notes']);
+
+                    // Notifikasi sukses yang informatif
+                    $message = $publishDate > now() 
+                        ? 'Tulisan dijadwalkan tayang pada ' . \Carbon\Carbon::parse($publishDate)->format('d M Y H:i')
+                        : 'Tulisan berhasil diterbitkan sekarang!';
+                        
+                    Notification::make()->title($message)->success()->send();
                 }),
 
             // 3. ACTION EDITOR: MINTA REVISI
