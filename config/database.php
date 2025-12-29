@@ -54,6 +54,7 @@ return [
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'timezone' => '+08:00', // Pastikan ini +08:00 untuk WITA/Makassar
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
