@@ -225,6 +225,7 @@ class PostResource extends Resource
 
                                 DateTimePicker::make('published_at')
                                     ->label('Tanggal Tayang')
+                                    ->helperText('Kosongkan untuk terbit sekarang, atau isi tanggal di masa depan untuk penjadwalan.')
                                     ->visible(fn () => !auth()->user()->isPenulis()) // Hanya tampilkan untuk Admin/Editor,
                                     ->disabled(fn ($record) => $record?->status_id === 5),
 
