@@ -37,14 +37,32 @@ class PostObserver
                     break;
 
                 case 3: // Published / Terbit
+                    $isFuture = $post->published_at > now();
+
+                    // Tentukan Pesan Berdasarkan Waktu
+                    $title = $isFuture ? 'Tulisan Dijadwalkan pada tanggal: ' . $post->published_at->format('d M Y H:i') : 'Tulisan Telah Terbit!';
+                    $message = $isFuture 
+                        ? "Tulisan \"{$post->title}\" disetujui & dijadwalkan tayang pada " . $post->published_at->format('d M Y H:i') . "."
+                        : "Selamat! Tulisan \"{$post->title}\" sudah tayang.";
+
+                    // Kirim Notifikasi ke Penulis
                     Notification::make()
-                        ->title('Tulisan Telah Terbit!')
-                        ->body("Selamat! Tulisan \"{$post->title}\" sudah tayang.")
-                        ->icon('heroicon-o-check-circle')
+                        ->title($title)
+                        ->body($message)
+                        ->icon($isFuture ? 'heroicon-o-clock' : 'heroicon-o-check-circle')
                         ->success()
                         ->sendToDatabase($penulis);
-                        // Kirim Email Notifikasi ke Penulis
-                    Mail::to($penulis->email)->send(new PostNotificationMail($post, 'Tulisan Telah Terbit!')); // <--- TAMBAHKAN INI (masih error)
+                        
+                    // 2. Email Notifikasi (Sekaligus Memperbaiki baris yang sebelumnya bertanda "masih error")
+                    Mail::to($penulis->email)->send(new PostNotificationMail($post, $title, $message));
+
+                    // JIKA TERBIT SEKARANG: Tandai notification_sent = true agar robot tidak kirim email lagi
+                    if (!$isFuture) {
+                        $post->notification_sent = true;
+                        // Gunakan saveQuietly agar tidak memicu Observer lagi (infinite loop)
+                        $post->saveQuietly(); 
+                    }
+
                     break;
 
                 case 4: // Revision / Revisi

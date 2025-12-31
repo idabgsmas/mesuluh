@@ -26,12 +26,14 @@ class Post extends Model
         'seo_title',
         'seo_description',
         'seo_image',
+        'notification_sent',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
         'is_featured' => 'boolean',
         'views' => 'integer',
+        'notification_sent' => 'boolean',
     ];
 
     // --- DEFINISI RELASI (INI YANG TADI KURANG) ---

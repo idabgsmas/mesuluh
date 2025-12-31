@@ -356,6 +356,18 @@
     <priority>0.9</priority>
             </url>
     <url>
+    <loc>http://127.0.0.1:8000/tulisan/tes-jadwal-3</loc>
+    <lastmod>2025-12-31T14:27:22+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/tulisan/tes-jadwal-4</loc>
+    <lastmod>2025-12-31T14:32:05+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+            </url>
+    <url>
     <loc>http://127.0.0.1:8000/kategori/sulur</loc>
     <priority>0.7</priority>
             </url>
