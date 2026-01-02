@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Pages;
+namespace App\Filament\Resources\QuoteResource\Pages;
 
-use App\Filament\Resources\UserResource;
+use App\Filament\Resources\QuoteResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateUser extends CreateRecord
+class CreateQuote extends CreateRecord
 {
-    protected static string $resource = UserResource::class;
+    protected static string $resource = QuoteResource::class;
 
     protected function getRedirectUrl(): string
     {

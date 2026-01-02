@@ -10,10 +10,20 @@ class EditContactMessage extends EditRecord
 {
     protected static string $resource = ContactMessageResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
+            Actions\Action::make('back')
+                ->label('Kembali')
+                ->icon('heroicon-m-arrow-left')
+                ->url($this->getResource()::getUrl('index'))
+                ->color('secondary'),
         ];
     }
 }

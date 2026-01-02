@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Pages;
+namespace App\Filament\Resources\QuoteResource\Pages;
 
-use App\Filament\Resources\UserResource;
+use App\Filament\Resources\QuoteResource;
 use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\Pages\EditRecord;
 
-class CreateUser extends CreateRecord
+class EditQuote extends EditRecord
 {
-    protected static string $resource = UserResource::class;
+    protected static string $resource = QuoteResource::class;
 
     protected function getRedirectUrl(): string
     {
@@ -18,10 +18,11 @@ class CreateUser extends CreateRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\DeleteAction::make(),
             Actions\Action::make('back')
                 ->label('Kembali')
-                ->icon('heroicon-m-arrow-left')
                 ->url($this->getResource()::getUrl('index'))
+                ->icon('heroicon-o-arrow-left')
                 ->color('secondary'),
         ];
     }

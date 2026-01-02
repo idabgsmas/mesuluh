@@ -274,12 +274,25 @@
                         </div>
                     </div>
 
-                    <div class="mt-8 p-6 bg-mesuluh-dark text-mesuluh-cream rounded-xl text-center relative overflow-hidden">
+                    <div class="bg-mesuluh-dark p-8 rounded-2xl text-center text-mesuluh-cream relative overflow-hidden group">
+                        <h4 class="font-serif text-xl italic mb-4 relative z-10">
+                            "{{ $homeSidebarQuote->content ?? 'Perempuan adalah penyangga kehidupan yang tak pernah lelah memberi cahaya.' }}"
+                        </h4>
+                        
+                        {{-- @if(isset($homeSidebarQuote->author)) --}}
+                            <p class="text-[10px] opacity-60 mb-4 tracking-widest uppercase">— {{ $homeSidebarQuote->author ?? 'Redaksi Mesuluh' }}</p>
+                        {{-- @endif --}}
+
+                        <a href="{{ url('/') }}#newsletter" class="inline-block px-6 py-2 border border-mesuluh-cream/30 rounded-full text-xs font-bold hover:bg-mesuluh-cream hover:text-mesuluh-primary transition relative z-10">
+                            Berlangganan
+                        </a>
+                    </div>
+                    {{-- <div class="mt-8 p-6 bg-mesuluh-dark text-mesuluh-cream rounded-xl text-center relative overflow-hidden">
                         <div class="absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 bg-mesuluh-primary rounded-full opacity-20 blur-xl"></div>
                         <p class="font-serif text-lg italic relative z-10">
                             "Perempuan adalah penyangga kehidupan yang tak pernah lelah memberi cahaya."
                         </p>
-                    </div>
+                    </div> --}}
 
                 </div>
 
@@ -289,7 +302,24 @@
 
     </section>
 
-    <section class="container mx-auto px-4 py-8">
+    <section class="py-20 bg-mesuluh-dark text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="font-serif text-3xl md:text-5xl italic leading-relaxed max-w-4xl mx-auto">
+                "{{ $featuredQuote->content ?? 'Perempuan Bali adalah penopang adat yang tangguh, namun ia juga sungai yang mengalirkan kelembutan bagi peradaban.' }}"
+            </h2>
+            {{-- @if(isset($featuredQuote->author)) --}}
+            <div class="flex flex-col items-center mb-0 mt-8">
+                <div class="h-1 w-20 bg-mesuluh-primary mb-5"></div>
+                <span class="text-white font-bold tracking-widest uppercase text-sm">{{ $featuredQuote->author ?? 'Redaksi Mesuluh' }}</span>
+            </div>
+                {{-- <p class="mt-8 text-mesuluh-primary font-bold tracking-widest uppercase text-sm">
+                    — {{ $featuredQuote->author ?? 'Redaksi Mesuluh' }}
+                </p> --}}
+            {{-- @endif --}}
+        </div>
+    </section>
+    
+    {{-- <section class="container mx-auto px-4 py-8">
         <div class="bg-mesuluh-dark rounded-3xl p-10 md:p-16 relative overflow-hidden text-center group">
             
             <div class="absolute top-0 left-0 w-64 h-64 bg-mesuluh-primary opacity-20 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2 group-hover:opacity-30 transition duration-1000"></div>
@@ -309,7 +339,7 @@
             </div>
 
         </div>
-    </section>
+    </section> --}}
 
     @if($rubrics->count() > 0)
     <section class="bg-mesuluh-primary text-mesuluh-cream py-20" 

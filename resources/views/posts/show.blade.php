@@ -271,8 +271,22 @@
                         <div class="mt-6 pt-4 border-t border-gray-100 text-center">
                             <a href="{{ route('posts.search') }}" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-mesuluh-primary transition">Lihat Indeks</a>
                         </div>
-                    </div> 
+                    </div>
                     <div class="bg-mesuluh-dark p-8 rounded-2xl text-center text-mesuluh-cream relative overflow-hidden group">
+                        <h4 class="font-serif text-xl italic mb-4 relative z-10">
+                            {{-- Logika Dinamis: Gunakan data DB, jika kosong tampilkan fallback --}}
+                            "{{ $sidebarQuote->content ?? 'Jadilah Suluh bagi sekitarmu.' }}"
+                        </h4>
+                        
+                        @if(isset($sidebarQuote->author))
+                            <p class="text-xs opacity-60 mb-4">— {{ $sidebarQuote->author }}</p>
+                        @endif
+
+                        <a href="{{ url('/') }}#newsletter" class="inline-block px-6 py-2 border border-mesuluh-cream/30 rounded-full text-xs font-bold hover:bg-mesuluh-cream hover:text-mesuluh-primary transition relative z-10">
+                            Berlangganan
+                        </a>
+                    </div> 
+                    {{-- <div class="bg-mesuluh-dark p-8 rounded-2xl text-center text-mesuluh-cream relative overflow-hidden group">
                          <div class="absolute top-0 right-0 -mr-6 -mt-6 w-24 h-24 bg-mesuluh-primary rounded-full opacity-20 blur-2xl group-hover:opacity-40 transition"></div>
                          
                          <h4 class="font-serif text-xl italic mb-4 relative z-10">"Jadilah Suluh bagi sekitarmu."</h4>
@@ -280,7 +294,7 @@
                          <a href="{{ url('/') }}#newsletter" class="inline-block px-6 py-2 border border-mesuluh-cream/30 rounded-full text-xs font-bold hover:bg-mesuluh-cream hover:text-mesuluh-primary transition relative z-10">
                             Berlangganan
                         </a>
-                    </div>
+                    </div> --}}
 
                 </div>
             </aside>

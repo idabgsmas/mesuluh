@@ -4,12 +4,83 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Quote;
 use App\Models\Category;
 use App\Models\PostView;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function welcome() 
+    {
+        $featuredPosts = Post::with(['user', 'category'])
+            ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+            ->where('published_at', '<=', now())
+            ->where('is_featured', true)
+            ->latest('published_at')
+            ->take(5)
+            ->get();
+    
+        // ID yang sudah muncul di slider, jangan dimunculkan lagi di bawah
+        $excludeIds = $featuredPosts->pluck('id');
+
+        // 2. Tulisan Terbaru (Untuk Kolom Kiri)
+        $latestPosts = Post::with(['user', 'category'])
+            ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+            ->where('published_at', '<=', now())
+            ->whereNotIn('id', $excludeIds)
+            ->latest('published_at')
+            ->take(6) 
+            ->get();
+        
+        // Update exclude IDs (biar ga dobel sama yang terbaru)
+        $excludeIds = $excludeIds->merge($latestPosts->pluck('id'));
+
+        // 3. Tulisan Terpopuler (Berdasarkan jumlah 'views')
+        $popularPosts = Post::with(['user', 'category'])
+            ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+            ->where('published_at', '<=', now())
+            ->orderBy('views', 'desc') // Urutkan dari view terbanyak
+            ->take(5)
+            ->get();
+
+        // 4. AMBIL SEMUA RUBRIK (KATEGORI)
+        // Ambil kategori yang punya minimal 1 postingan published
+        $rubrics = Category::whereHas('posts', fn($q) => $q->whereHas('status', fn($sq) => $sq->where('name', 'Published')))
+            ->with(['posts' => function($query) {
+                // Ambil 4 postingan terbaru per kategori
+                $query->whereHas('status', fn($q) => $q->where('name', 'Published'))
+                    ->where('published_at', '<=', now())
+                    ->latest('published_at')
+                    ->take(4);
+            }])
+            ->get();
+
+        // 5. Ambil 1 Quote Besar (home_featured) secara acak
+        $featuredQuote = \App\Models\Quote::where('is_active', true)
+            ->where('position', 'home_featured')
+            ->inRandomOrder()
+            ->first();
+
+        // 6. Ambil 1 Quote Sidebar secara acak
+        $homeSidebarQuote = \App\Models\Quote::where('is_active', true)
+            ->where('position', 'home_sidebar')
+            ->inRandomOrder()
+            ->first();
+
+        return view('welcome', [
+            'featuredPosts' => $featuredPosts,
+            'latestPosts' => $latestPosts,   // Perhatikan nama variabelnya saya ganti jadi latestPosts
+            'popularPosts' => $popularPosts,
+            'rubrics' => $rubrics,
+            'featuredQuote' => $featuredQuote,
+            'homeSidebarQuote' => $homeSidebarQuote,
+            // 'sulurPosts' => $sulurPosts,
+            // 'suluhPosts' => $suluhPosts,
+            // 'singgahPosts' => $singgahPosts,
+            // 'tautPosts' => $tautPosts,
+        ]);
+    }
     /**
      * Menampilkan Halaman Detail Artikel
      */
@@ -73,8 +144,15 @@ class PostController extends Controller
             ->orderBy('published_at', 'desc')
             ->first();
 
+        // Ambil 1 quote acak untuk sidebar
+        $sidebarQuote = Quote::where('is_active', true)
+            ->where('position', 'sidebar')
+            ->inRandomOrder()
+            ->first();
+
         return view('posts.show', [
             'post' => $post,
+            'sidebarQuote' => $sidebarQuote,
             'relatedPosts' => $relatedPosts,
             'latestPosts' => $latestPosts, // Kirim data baru ini
             'nextPost' => $nextPost,

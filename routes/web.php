@@ -19,62 +19,64 @@ Route::get('/lang/{locale}', function ($locale) {
 })->name('switch.language');
 
 // Route Halaman Beranda
-Route::get('/', function () {
-    // 1. Featured (Slider)
-    $featuredPosts = Post::with(['user', 'category'])
-        ->whereHas('status', fn($q) => $q->where('name', 'Published'))
-        ->where('published_at', '<=', now())
-        ->where('is_featured', true)
-        ->latest('published_at')
-        ->take(5)
-        ->get();
+Route::get('/', [App\Http\Controllers\PostController::class, 'welcome'])->name('welcome');
+
+// Route::get('/', function () {
+//     // 1. Featured (Slider)
+//     $featuredPosts = Post::with(['user', 'category'])
+//         ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+//         ->where('published_at', '<=', now())
+//         ->where('is_featured', true)
+//         ->latest('published_at')
+//         ->take(5)
+//         ->get();
     
-    // ID yang sudah muncul di slider, jangan dimunculkan lagi di bawah
-    $excludeIds = $featuredPosts->pluck('id');
+//     // ID yang sudah muncul di slider, jangan dimunculkan lagi di bawah
+//     $excludeIds = $featuredPosts->pluck('id');
 
-    // 2. Tulisan Terbaru (Untuk Kolom Kiri)
-    $latestPosts = Post::with(['user', 'category'])
-        ->whereHas('status', fn($q) => $q->where('name', 'Published'))
-        ->where('published_at', '<=', now())
-        ->whereNotIn('id', $excludeIds)
-        ->latest('published_at')
-        ->take(6) 
-        ->get();
+//     // 2. Tulisan Terbaru (Untuk Kolom Kiri)
+//     $latestPosts = Post::with(['user', 'category'])
+//         ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+//         ->where('published_at', '<=', now())
+//         ->whereNotIn('id', $excludeIds)
+//         ->latest('published_at')
+//         ->take(6) 
+//         ->get();
     
-    // Update exclude IDs (biar ga dobel sama yang terbaru)
-    $excludeIds = $excludeIds->merge($latestPosts->pluck('id'));
+//     // Update exclude IDs (biar ga dobel sama yang terbaru)
+//     $excludeIds = $excludeIds->merge($latestPosts->pluck('id'));
 
-    // 3. Tulisan Terpopuler (Berdasarkan jumlah 'views')
-    $popularPosts = Post::with(['user', 'category'])
-        ->whereHas('status', fn($q) => $q->where('name', 'Published'))
-        ->where('published_at', '<=', now())
-        ->orderBy('views', 'desc') // Urutkan dari view terbanyak
-        ->take(5)
-        ->get();
+//     // 3. Tulisan Terpopuler (Berdasarkan jumlah 'views')
+//     $popularPosts = Post::with(['user', 'category'])
+//         ->whereHas('status', fn($q) => $q->where('name', 'Published'))
+//         ->where('published_at', '<=', now())
+//         ->orderBy('views', 'desc') // Urutkan dari view terbanyak
+//         ->take(5)
+//         ->get();
 
-    // 4. AMBIL SEMUA RUBRIK (KATEGORI)
-    // Ambil kategori yang punya minimal 1 postingan published
-    $rubrics = Category::whereHas('posts', fn($q) => $q->whereHas('status', fn($sq) => $sq->where('name', 'Published')))
-        ->with(['posts' => function($query) {
-            // Ambil 4 postingan terbaru per kategori
-            $query->whereHas('status', fn($q) => $q->where('name', 'Published'))
-                  ->where('published_at', '<=', now())
-                  ->latest('published_at')
-                  ->take(4);
-        }])
-        ->get();
+//     // 4. AMBIL SEMUA RUBRIK (KATEGORI)
+//     // Ambil kategori yang punya minimal 1 postingan published
+//     $rubrics = Category::whereHas('posts', fn($q) => $q->whereHas('status', fn($sq) => $sq->where('name', 'Published')))
+//         ->with(['posts' => function($query) {
+//             // Ambil 4 postingan terbaru per kategori
+//             $query->whereHas('status', fn($q) => $q->where('name', 'Published'))
+//                   ->where('published_at', '<=', now())
+//                   ->latest('published_at')
+//                   ->take(4);
+//         }])
+//         ->get();
 
-    return view('welcome', [
-        'featuredPosts' => $featuredPosts,
-        'latestPosts' => $latestPosts,   // Perhatikan nama variabelnya saya ganti jadi latestPosts
-        'popularPosts' => $popularPosts,
-        'rubrics' => $rubrics,
-        // 'sulurPosts' => $sulurPosts,
-        // 'suluhPosts' => $suluhPosts,
-        // 'singgahPosts' => $singgahPosts,
-        // 'tautPosts' => $tautPosts,
-    ]);
-});
+//     return view('welcome', [
+//         'featuredPosts' => $featuredPosts,
+//         'latestPosts' => $latestPosts,   // Perhatikan nama variabelnya saya ganti jadi latestPosts
+//         'popularPosts' => $popularPosts,
+//         'rubrics' => $rubrics,
+//         // 'sulurPosts' => $sulurPosts,
+//         // 'suluhPosts' => $suluhPosts,
+//         // 'singgahPosts' => $singgahPosts,
+//         // 'tautPosts' => $tautPosts,
+//     ]);
+// });
 
 // Route Daftar Semua Penulis
 Route::get('/penulis', [PostController::class, 'authors'])->name('authors.index');

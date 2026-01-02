@@ -11,6 +11,11 @@ class EditPost extends EditRecord
 {
     protected static string $resource = PostResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -166,6 +171,11 @@ class EditPost extends EditRecord
                 }),
 
             Actions\DeleteAction::make(),
+            Actions\Action::make('back')
+                ->label('Kembali')
+                ->icon('heroicon-m-arrow-left')
+                ->url($this->getResource()::getUrl('index'))
+                ->color('secondary'),
         ];
     }
 }
