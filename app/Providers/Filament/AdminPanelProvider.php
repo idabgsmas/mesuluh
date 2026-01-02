@@ -46,6 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotificationsPolling('30s')
             ->profile()
             ->login()
+            ->passwordReset()
             ->colors([
                 'primary' => Color::hex('#8b004b'),
             ])

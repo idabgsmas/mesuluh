@@ -163,6 +163,44 @@
                 <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-mesuluh-cream"></path>
             </svg>
         </div>
+        
+        <div class="container mx-auto px-4">
+            <h2 class="font-serif text-3xl font-bold text-center mb-16">Dapur Redaksi</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                @foreach($teamMembers as $member)
+                    <div class="text-center group">
+                        <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-6 border-4 border-mesuluh-cream shadow-lg relative group-hover:scale-110 transition duration-500">
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300">
+                                @if($member->photo)
+                                    {{-- Tampilkan Foto Jika Ada --}}
+                                    <img src="{{ asset('storage/' . $member->photo) }}" 
+                                        alt="{{ $member->name }}" 
+                                        class="w-full h-full object-cover">
+                                @else
+                                    {{-- Tampilkan Avatar Default Berdasarkan Inisial Nama (Profesional & Ringan) --}}
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($member->name) }}&background=8b004b&color=fff&size=200" 
+                                        alt="{{ $member->name }}" 
+                                        class="w-full h-full object-cover">
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">{{ $member->name }}</h3>
+                        <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">{{ $member->position }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- <section id="redaksi" class="py-24 bg-white relative scroll-mt-32 transition-colors duration-300">
+        
+        <div class="absolute top-0 left-0 w-full overflow-hidden leading-[0]">
+            <svg class="relative block w-[calc(100%+1.3px)] h-[50px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-mesuluh-cream"></path>
+            </svg>
+        </div>
 
         <div class="container mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
@@ -177,56 +215,24 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                 
                 <div class="group text-center">
-                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-6 border-4 border-mesuluh-cream shadow-lg relative group-hover:scale-110 transition duration-500">
-                        <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-20 h-20">
-                              <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                            </svg>
+                    @foreach($teamMembers as $member)
+                        <div class="text-center group">
+                            <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-6 border-4 border-mesuluh-cream shadow-lg relative group-hover:scale-110 transition duration-500">
+                                <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300">
+                                    <img src="{{ asset('storage/' . $member->photo) ?? asset('img/default-profile.png') }}" 
+                                    alt="{{ $member->name }}" 
+                                    class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                            <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">{{ $member->name }}</h3>
+                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">{{ $member->position }}</p>
                         </div>
-                    </div>
-                    <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">Ida Ayu</h3>
-                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">Pemimpin Redaksi</p>
-                </div>
-
-                <div class="group text-center">
-                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-6 border-4 border-mesuluh-cream shadow-lg relative group-hover:scale-110 transition duration-500">
-                        <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-20 h-20">
-                              <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">Ni Luh Putu</h3>
-                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">Redaktur Pelaksana</p>
-                </div>
-
-                <div class="group text-center">
-                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-6 border-4 border-mesuluh-cream shadow-lg relative group-hover:scale-110 transition duration-500">
-                        <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-20 h-20">
-                              <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">Wayan Sari</h3>
-                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">Jurnalis</p>
-                </div>
-
-                <div class="group text-center">
-                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-6 border-4 border-mesuluh-cream shadow-lg relative group-hover:scale-110 transition duration-500">
-                         <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-20 h-20">
-                              <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="font-serif font-bold text-xl text-mesuluh-dark group-hover:text-mesuluh-primary transition">Kadek Adi</h3>
-                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">Editor</p>
+                    @endforeach
                 </div>
 
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="py-20 bg-mesuluh-dark text-mesuluh-cream text-center">
         <div class="container mx-auto px-4">

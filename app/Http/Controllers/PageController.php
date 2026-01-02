@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TeamMember;
 use Illuminate\Http\Request;
 use App\Models\ContactMessage;
 
@@ -26,7 +27,10 @@ class PageController extends Controller
     
     public function about()
     {
-        return view('pages.about');
+        // Mengambil data anggota tim dari database, diurutkan berdasarkan sort_order
+        $teamMembers = TeamMember::orderBy('sort_order', 'asc')->get();
+        
+        return view('pages.about', compact('teamMembers'));
     }
 
     public function pedoman()
