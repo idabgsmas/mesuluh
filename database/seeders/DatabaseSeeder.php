@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Quote;
 use App\Models\Status;
 use App\Models\Category;
 use App\Models\TeamMember;
