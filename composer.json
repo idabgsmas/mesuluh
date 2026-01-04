@@ -3,10 +3,17 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-intl": "*",
+        "ext-zip": "*",
+        "ext-gd": "*",
+        "ext-exif": "*",
         "filament/filament": "3.*",
         "flowframe/laravel-trend": "^0.4.0",
         "intervention/image": "^3.11",
