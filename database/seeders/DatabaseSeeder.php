@@ -2,14 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use App\Models\Post;
-use App\Models\Status;
-use App\Models\User;
 use App\Models\Role;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Status;
+use App\Models\Category;
+use App\Models\TeamMember;
 use Illuminate\Support\Str;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -80,9 +81,32 @@ class DatabaseSeeder extends Seeder
                     'published_at' => fake()->dateTimeBetween('-1 year', 'now'), // Tanggal acak setahun terakhir
                     'is_featured' => fake()->boolean(20), // 20% kemungkinan jadi Featured/Headline
                     'views' => fake()->numberBetween(100, 5000), // Jumlah view acak biar seru
+                    'notification_sent' => true, // Anggap notifikasi sudah dikirim
                 ]);
             }
         }
+
+        // 7. BUAT DATA TIM (Dapur Redaksi)
+        TeamMember::firstOrCreate(['name' => 'Ida Ayu'], [
+            'position' => 'Pemimpin Redaksi',
+            'photo' => null, // Biarkan null agar muncul avatar default
+            'sort_order' => 1
+        ]);
+
+        // 8. BUAT QUOTES
+        Quote::create([
+            'content' => 'Jadilah Suluh bagi sekitarmu.',
+            'author' => 'Redaksi Mesuluh',
+            'position' => 'sidebar',
+            'is_active' => true
+        ]);
+
+        Quote::create([
+            'content' => 'Sebab kami percaya dengan berkisah mampu menjadi suluh dalam merawat hingga meruwat kehidupan.',
+            'author' => 'Mesuluh',
+            'position' => 'home_featured',
+            'is_active' => true
+        ]);
         
         // Buat 1 Postingan Spesifik untuk Headline (Pasti Featured)
         Post::create([
