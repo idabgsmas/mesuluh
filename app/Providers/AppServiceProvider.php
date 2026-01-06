@@ -2,17 +2,18 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\PostView;
 use App\Models\Subscriber;
 use App\Models\ContactMessage;
-use App\Models\PostView;
 use App\Observers\PostObserver;
 use App\Observers\UserObserver;
-use App\Observers\SubscriberObserver;
-use App\Observers\ContactMessageObserver;
 use App\Observers\PostViewObserver;
+use Illuminate\Support\Facades\URL;
+use App\Observers\SubscriberObserver;
+use Illuminate\Support\ServiceProvider;
+use App\Observers\ContactMessageObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
