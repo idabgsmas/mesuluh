@@ -5,13 +5,13 @@
     nixPkgs = ['php83', 'php83Packages.composer', 'nodejs_20']
 
 [phases.build]
-    # Kita tambahkan '|| true' agar jika link sudah ada, build tidak gagal (exit code 0)
+    # Kita tambahkan perintah untuk install node modules dan build asset
     cmds = [
         'composer install --optimize-autoloader --no-dev',
-        'php artisan storage:link || true',
-        'npm install && npm run build'
+        'npm install',
+        'npm run build',
+        'php artisan storage:link || true'
     ]
 
 [start]
-    # Ini adalah perintah pengganti heroku-php-apache2
     cmd = 'php artisan serve --host 0.0.0.0 --port $PORT'

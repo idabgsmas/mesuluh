@@ -29,5 +29,9 @@ class AppServiceProvider extends ServiceProvider
         Subscriber::observe(SubscriberObserver::class);
         ContactMessage::observe(ContactMessageObserver::class);
         PostView::observe(PostViewObserver::class);
+
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
