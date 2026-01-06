@@ -17,10 +17,17 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->command->info('Sedang mengisi data ke database Mesuluh...');
         // 1. BUAT ROLES
-        $adminRole = Role::firstOrCreate(['id' => 1], ['name' => 'Admin'], ['slug' => 'admin']);
-        $editorRole = Role::firstOrCreate(['id' => 2], ['name' => 'Editor'], ['slug' => 'editor']);
-        $penulisRole = Role::firstOrCreate(['id' => 3], ['name' => 'Penulis'], ['slug' => 'penulis']);
+        // $adminRole = Role::firstOrCreate(['id' => 1], ['name' => 'Admin'], ['slug' => 'admin']);
+        // $editorRole = Role::firstOrCreate(['id' => 2], ['name' => 'Editor'], ['slug' => 'editor']);
+        // $penulisRole = Role::firstOrCreate(['id' => 3], ['name' => 'Penulis'], ['slug' => 'penulis']);
+
+        // 1. BUAT ROLES (Gabungkan data yang ingin disimpan ke array kedua)
+        $adminRole = Role::firstOrCreate(['id' => 1], ['name' => 'Admin', 'slug' => 'admin']);
+        $editorRole = Role::firstOrCreate(['id' => 2], ['name' => 'Editor', 'slug' => 'editor']);
+        $penulisRole = Role::firstOrCreate(['id' => 3], ['name' => 'Penulis', 'slug' => 'penulis']);
+        $this->command->info('Roles berhasil dibuat.');
 
         // 2. BUAT STATUSES (URUTAN PENTING!)
         Status::firstOrCreate(['id' => 1], ['name' => 'Draft', 'color' => 'gray']);
@@ -28,6 +35,7 @@ class DatabaseSeeder extends Seeder
         Status::firstOrCreate(['id' => 3], ['name' => 'Published', 'color' => 'success']);
         Status::firstOrCreate(['id' => 4], ['name' => 'Revisi', 'color' => 'danger']);
         Status::firstOrCreate(['id' => 5], ['name' => 'Ditolak', 'color' => 'danger']);
+        $this->command->info('Statuses berhasil dibuat.');
 
         // 3. BUAT USER ADMIN UTAMA
         $user = User::firstOrCreate(
@@ -40,6 +48,7 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
+        $this->command->info('User berhasil dibuat.');
 
         // 4. Buat Status (Penting untuk filter Published)
         $statusPublished = Status::firstOrCreate(['name' => 'Published'], ['slug' => 'published', 'color' => 'success']);
@@ -123,6 +132,8 @@ class DatabaseSeeder extends Seeder
             'is_featured' => true,
             'views' => 9999,
         ]);
+
+        $this->command->info('Data berhasil dimasukkan!');
     }
 
     // Fungsi helper untuk bikin konten HTML panjang
